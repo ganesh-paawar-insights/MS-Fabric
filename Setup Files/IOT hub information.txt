@@ -1,0 +1,19 @@
+ClientId :- device01
+Device id = device01
+dec-hub-982.azure-devices.net
+Username :- dec-hub-982.azure-devices.net/device01/?api-version=2021-04-12
+	    	contoso.azure-devices.net/MyDevice01/?api-version=2021-04-12
+Password :- SharedAccessSignature=SharedAccessSignature sr=dec-hub-982.azure-devices.net%2Fdevices%2Fdevice01&sig=ui%2F27fEjgF7Roa42IcTAopfCKGkATgASM%2FHJrgbkY4E%3D&se=1693140748
+HostName=dec-hub-982.azure-devices.net;DeviceId=device01;SharedAccessSignature=SharedAccessSignature sr=dec-hub-982.azure-devices.net%2Fdevices%2Fdevice01&sig=4Dw9HtjQfmp8PFesSMoP6qvXy7ULnsqLZN%2Forz%2FpgAc%3D&se=1693143561
+
+Topics
+Send  devices/device01/messages/events/
+
+Received devices/device01/messages/devicebound/#
+
+To monitor the IOT hub receive message 
+az iot hub monitor-events --hub-name dec-hub-982
+
+az iot hub generate-sas-token -n dec-hub-982 -d device01 --du 600
+
+SharedAccessSignature sr=dec-hub-982.azure-devices.net%2Fdevices%2Fdevice01&sig=kjBBVVgaok5PBprFcoLEPJ2rDwla%2FMrVUEglE2b%2FrRY%3D&se=1693140098

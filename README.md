@@ -3,7 +3,7 @@ Project Repository README
 
 Overview
 --------
-This repository contains learning resources, source code, demo files, demo projects, interview preparation material, and setup-related documentation. It is organized to help users quickly find study material, run code examples, explore demos, and prepare for technical interviews.
+This repository contains learning resources, source code, demo files, demo projects, interview preparation material, and setup-related documentation. It is organized to help users quickly find study material, run code examples, explore demos and prepare for technical interviews.
 
 Folder Structure
 ----------------

@@ -1,0 +1,1060 @@
+INTERVIEW QUESTIONS AND ANSWERS - CLEAN TEXT VERSION
+Generated from uploaded ZIP: interview-20260605T094539Z-3-001.zip
+
+Notes:
+- Included: text interview notes, ADF Excel Q&A sheet, clear typed image text, and legible handwritten interview topics/questions.
+- Some source files had only questions or hints. For those, concise sample answers were added.
+- Skipped/limited: resume PDF/DOC, Databricks course PDFs, and DBC training archive because they are not direct interview Q&A files. Unclear handwritten text was not included.
+
+============================================================
+SECTION 1: SQL DEVELOPER QUESTIONS AND ANSWERS
+============================================================
+
+1. What is the difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN?
+Answer: INNER JOIN returns only matching rows from both tables. LEFT JOIN returns all rows from the left table and matching rows from the right table; unmatched right-side values become NULL. RIGHT JOIN returns all rows from the right table and matching rows from the left table; unmatched left-side values become NULL.
+
+2. What is a primary key and a foreign key?
+Answer: A primary key uniquely identifies each row in a table and cannot contain NULL values. A foreign key is a column that refers to a primary key or unique key in another table and maintains referential integrity.
+
+3. How do you prevent SQL injection?
+Answer: Use parameterized queries or prepared statements, avoid unsafe dynamic SQL, validate inputs, apply least privilege, and never concatenate raw user input directly into SQL statements.
+
+4. What is normalization? Explain 1NF, 2NF, and 3NF.
+Answer: Normalization organizes data to reduce redundancy and improve consistency. 1NF means columns contain atomic values. 2NF means non-key columns depend on the full primary key. 3NF means non-key columns do not depend on other non-key columns.
+
+5. What are indexes? How do they improve performance?
+Answer: Indexes are data structures that help the database find rows faster. They reduce full table scans and improve SELECT, JOIN, WHERE, and ORDER BY performance, but they add overhead on INSERT, UPDATE, and DELETE operations.
+
+6. What is a CTE?
+Answer: A Common Table Expression is a temporary named result set defined with WITH and used within a SELECT, INSERT, UPDATE, or DELETE statement. It improves readability and can be recursive.
+
+7. How do you optimize a slow-running query?
+Answer: Check the execution plan, add or tune indexes, update statistics, reduce selected columns, avoid unnecessary functions on indexed columns, replace cursors with set-based logic where possible, filter early, and break complex logic into smaller steps.
+
+8. What is the difference between RANK(), DENSE_RANK(), and ROW_NUMBER()?
+Answer: ROW_NUMBER gives a unique sequential number to each row. RANK gives the same rank to ties but skips the next rank. DENSE_RANK gives the same rank to ties and does not skip ranks.
+
+9. What is a query execution plan?
+Answer: An execution plan shows how the database engine executes a query, including joins, scans, seeks, sorts, and estimated costs. It is used to identify bottlenecks and optimize queries.
+
+10. What is partitioning in SQL?
+Answer: Partitioning splits a large table or index into smaller logical parts, often by range, list, or hash. It improves manageability and can improve performance when queries filter by the partition key.
+
+11. How do you handle deadlocks in SQL?
+Answer: Keep transactions short, access tables in a consistent order, add proper indexes, use lower isolation only when safe, retry failed transactions, and analyze deadlock graphs to find the root cause.
+
+12. What are materialized views?
+Answer: A materialized view stores query results physically and can be refreshed. A normal view stores only the query definition and is calculated at runtime.
+
+13. What is the difference between MERGE, UPSERT, and INSERT ON DUPLICATE KEY UPDATE?
+Answer: MERGE is a SQL statement that can insert, update, or delete based on matched conditions. UPSERT is a general term for insert-or-update logic. INSERT ON DUPLICATE KEY UPDATE is MySQL-specific syntax for UPSERT behavior.
+
+14. How do you implement auditing in SQL databases?
+Answer: Use database audit features, triggers, change tracking/change data capture, temporal tables, or custom audit tables to log who changed what and when.
+
+15. What are window functions?
+Answer: Window functions calculate values across a set of related rows while keeping individual rows. Examples are ROW_NUMBER, RANK, DENSE_RANK, LEAD, LAG, SUM() OVER, and AVG() OVER.
+
+16. How do you handle schema changes in production?
+Answer: Use version-controlled migration scripts, test in lower environments, use backward-compatible changes where possible, schedule deployments, take backups, and have rollback plans.
+
+17. What is the role of ETL in SQL development?
+Answer: ETL extracts data from source systems, transforms it according to business rules, and loads it into a target system such as a warehouse, lakehouse, or reporting database.
+
+18. How do you ensure data integrity and consistency across distributed systems?
+Answer: Use transactions where possible, idempotent processing, deduplication, constraints, reconciliation checks, replication monitoring, conflict resolution, and clear consistency models.
+
+============================================================
+SECTION 2: AZURE DATA FACTORY QUESTIONS AND ANSWERS
+============================================================
+
+1. What is Azure Data Factory?
+Answer: Azure Data Factory is a cloud data integration and orchestration service. It is used to move, transform, and orchestrate data between cloud and on-premises sources using pipelines, triggers, datasets, linked services, and integration runtimes.
+
+2. What are the main components in ADF?
+Answer: Pipeline is the logical container. Activity is a processing step. Dataset represents the data structure. Linked Service stores connection information. Trigger starts a pipeline. Integration Runtime provides compute/connectivity. Mapping Data Flow provides visual transformations.
+
+3. What is the difference between Dataset and Linked Service?
+Answer: Linked Service defines the connection to a data store or compute service. Dataset points to the specific data object inside that service, such as a table, file, folder, or query.
+
+4. What is Integration Runtime in ADF?
+Answer: Integration Runtime is the compute and connectivity layer used by ADF to copy data, run data flows, dispatch activities, and connect across public networks, private networks, and on-premises environments.
+
+5. What are the types of Integration Runtime?
+Answer: Azure IR is managed by Azure and used for cloud/public data movement. Self-hosted IR is installed on a machine to access on-premises or private network data. Azure-SSIS IR is used to run SSIS packages in Azure.
+
+6. Which firewall option allows ADF to access Azure SQL Database?
+Answer: Enable "Allow Azure services and resources to access this server" or use managed private endpoints/private link depending on the security design.
+
+7. Where can you monitor a pipeline run executed in Debug mode?
+Answer: Debug execution can be monitored in the pipeline Output tab. It does not appear like normal triggered runs in Monitor until it is triggered/published normally.
+
+8. Which dependency runs the next activity regardless of previous activity status?
+Answer: Completion dependency runs the next activity after the previous activity completes, whether it succeeds or fails.
+
+9. What are the ways to execute an ADF pipeline?
+Answer: Debug mode, manual Trigger Now execution, schedule trigger, tumbling window trigger, event trigger, REST API, SDK, PowerShell, or another pipeline using Execute Pipeline activity.
+
+10. What is the difference between Stored Procedure activity and Lookup activity?
+Answer: Stored Procedure activity runs a procedure mainly for database-side operations. Lookup activity retrieves data from a source and returns output to the pipeline for control flow decisions.
+
+11. How do you load multiple files into one table in ADF?
+Answer: Use a Copy activity with wildcard path, folder path, or metadata-driven ForEach. Parameterize the dataset and use a single copy activity where possible. For different schemas, use mapping or separate metadata rules.
+
+12. What is Azure Function activity in ADF?
+Answer: Azure Function activity calls a serverless Azure Function from a pipeline. It is useful for custom logic such as calling APIs, file handling, validation, or custom notifications.
+
+13. What is the difference between ADF v1 and ADF v2?
+Answer: ADF v2 supports visual authoring, triggers, control flow, integration runtime, mapping data flows, SSIS integration, more connectors, and better monitoring. ADF v1 was mainly dataset/slice based and less flexible.
+
+14. What are the types of triggers in ADF?
+Answer: Schedule trigger runs by time schedule. Tumbling window trigger runs fixed-size non-overlapping time windows and supports backfill/retry. Event trigger runs when an event occurs, such as a file arriving in storage.
+
+15. What is Wait activity?
+Answer: Wait activity pauses pipeline execution for a specified number of seconds. It is used for delay, retry gaps, polling scenarios, or sequencing.
+
+16. What is Copy activity?
+Answer: Copy activity moves data from a source to a sink. Examples: SQL to ADLS, Blob to Azure SQL, SFTP to Data Lake, REST API to SQL, or on-premises SQL to cloud storage.
+
+17. What is REST API usage in ADF?
+Answer: ADF can call REST APIs using Web activity or REST connector. It can also be automated through ADF REST APIs to create, monitor, trigger, or manage pipelines.
+
+18. How do you read Excel files in ADF?
+Answer: Use the Excel connector/dataset, select sheet or range, configure first row as header if needed, and use Copy activity or Data Flow to load it. For multiple sheets, use metadata-driven logic where possible.
+
+19. What is Get Metadata activity?
+Answer: Get Metadata retrieves metadata such as file list, size, last modified time, existence, column structure, or child items. It is commonly used before ForEach loops and validations.
+
+20. What is managed identity and SAS token usage in ADF?
+Answer: Managed identity lets ADF authenticate to Azure services without storing secrets. SAS token gives time-limited delegated access to storage. Managed identity is preferred when possible.
+
+21. How do you configure Self-hosted Integration Runtime?
+Answer: Create a self-hosted IR in ADF, download and install the IR software on a machine with network access to the source, register it using the authentication key, test connectivity, and configure linked services to use it.
+
+22. Why is nested ForEach not directly supported in ADF?
+Answer: ADF does not allow direct nested ForEach activities in the same pipeline level. A common workaround is to call a child pipeline from inside the first ForEach and place another ForEach in the child pipeline.
+
+23. Pipeline 2 in ADF2 should run after Pipeline 1 in ADF1. Which activity and trigger should be used?
+Answer: Use Web activity or REST API to trigger Pipeline 2 after Pipeline 1 completes, or use Event Grid/storage/event-based trigger if Pipeline 1 creates a completion marker file. For same factory, Execute Pipeline activity can be used.
+
+24. You have an Excel file with multiple sheets in a local folder. How do you load data in minimum activities using ADF?
+Answer: Use Self-hosted IR to access the local folder, Get Metadata or a configuration table to list sheets/files, parameterize the Excel dataset, and use ForEach with one Copy activity or Data Flow to load each sheet.
+
+25. How do you implement SCD Type 2 in ADF?
+Answer: Compare source and target using keys and hash/difference columns. Expire the current active record by setting end_date and current_flag = false, then insert a new current record with start_date and current_flag = true. Mapping Data Flow Alter Row or SQL MERGE/stored procedure can be used.
+
+26. You have 100 files in ADLS. Pipeline loaded 10 files and then failed. How do you load from the 11th file next time?
+Answer: Maintain a control/audit table with file name and status. Mark files as success only after loading. On rerun, filter only unprocessed or failed files and process from the 11th file onward. Design the load as idempotent.
+
+27. How do you pass parameters to a Databricks notebook from ADF?
+Answer: Use the Databricks Notebook activity and pass values in Base parameters. In the notebook, read them using dbutils.widgets.get("parameter_name").
+
+28. Difference between ADF and SSIS?
+Answer: SSIS is mainly an on-premises ETL tool in the SQL Server ecosystem. ADF is a cloud-native orchestration and data integration service with many cloud connectors, triggers, monitoring, and scalable integration runtime.
+
+29. Difference between parameters and variables in ADF?
+Answer: Parameters are read-only values supplied at pipeline, dataset, linked service, or data flow runtime. Variables are mutable values inside a pipeline and can be set or appended during execution.
+
+30. What is Set Variable activity and Append Variable activity?
+Answer: Set Variable assigns or updates a variable value. Append Variable adds a value to an array variable.
+
+31. How do you pass output from one activity to another, for example Lookup output to Copy activity?
+Answer: Use dynamic expressions such as @activity('Lookup1').output.firstRow.columnName or @activity('Lookup1').output.value, and pass the value into dataset parameters, query, or sink/source settings.
+
+32. Can a foreign key value be NULL?
+Answer: Yes, a foreign key column can be NULL unless it is defined as NOT NULL. A NULL foreign key means the row is not currently related to a parent row.
+
+33. How do you call a Databricks notebook in ADF?
+Answer: Create an Azure Databricks linked service, add a Notebook activity, select the workspace/cluster or job cluster, provide notebook path, and pass base parameters if required.
+
+34. What is Lookup activity?
+Answer: Lookup activity reads a small result set or a single row from a source. It is commonly used for configuration, watermarks, control tables, and passing values to other activities.
+
+35. How do you create a parameterized linked service?
+Answer: Add parameters to the linked service and use dynamic content in connection properties such as server, database, URL, account name, or secret name. Pass values from dataset or pipeline parameters.
+
+36. How do you configure email or send email in ADF?
+Answer: ADF has no native email activity. Use Web activity with Logic Apps, Azure Function, SendGrid API, Office 365 connector, or Azure Automation. For Teams, use an incoming webhook or Logic App.
+
+37. How do you skip first 10 records and start loading from the 11th record in ADF?
+Answer: For files, use source settings such as skip line count when available, or use Data Flow with row number/filter logic. For databases, use query pagination or WHERE conditions based on key/watermark.
+
+38. If I create one linked service for one database, can I reuse it for another database?
+Answer: Yes if it is parameterized. Use linked service parameters for database name/server and pass the values at runtime.
+
+39. Why do we use views?
+Answer: Views simplify complex queries, hide sensitive columns, provide reusable logic, support security abstraction, and present a consistent interface to users.
+
+40. How do you load SFTP/FTP files into a database using ADF?
+Answer: Create SFTP/FTP linked service and dataset, create sink linked service/dataset for the database, then use Copy activity. Use wildcards/ForEach for multiple files.
+
+41. How do you download ZIP, unzip, and load files into a table in ADF?
+Answer: Use Copy activity binary mode to move the ZIP, Azure Function/Databricks/Custom activity to unzip, then Copy/Data Flow to load extracted files.
+
+42. How do you move files from AWS storage to Azure storage?
+Answer: Use ADF connectors for Amazon S3 and ADLS/Blob, configure credentials or managed identity where possible, and use Copy activity with parallelism and retry settings.
+
+43. How do you log pipeline execution to a SQL table?
+Answer: Use pipeline system variables, activity outputs, and Stored Procedure activity or Script activity to insert run id, pipeline name, start time, end time, status, rows copied, and error message.
+
+44. What are ADF artifacts?
+Answer: ADF artifacts include pipelines, datasets, linked services, triggers, data flows, integration runtimes, credentials, managed private endpoints, and global parameters.
+
+45. How do you lift and shift SSIS packages to Azure?
+Answer: Use Azure-SSIS Integration Runtime in ADF, deploy packages to SSISDB in Azure SQL Database/Managed Instance, configure connections, and execute packages through ADF.
+
+46. How do you implement CI/CD for ADF?
+Answer: Use Git integration, publish ARM templates, and deploy through Azure DevOps/GitHub pipelines with environment-specific parameters.
+
+47. What are common ADF activities and transformations?
+Answer: Activities include Copy, Lookup, Get Metadata, ForEach, If Condition, Web, Execute Pipeline, Databricks Notebook, Stored Procedure, Wait, and Data Flow. Data Flow transformations include Select, Filter, Join, Aggregate, Derived Column, Conditional Split, Lookup, Pivot, and Sink.
+
+============================================================
+SECTION 3: AZURE, SYNAPSE, SSIS, AND DATA WAREHOUSE TOPICS
+============================================================
+
+1. What is the difference between clustered, nonclustered, columnstore, heap, and nonclustered index?
+Answer: A clustered index defines the physical/logical order of table data. A nonclustered index is a separate structure pointing to base rows. Columnstore stores data by columns and is good for analytics. A heap is a table without a clustered index.
+
+2. What is index scan vs index seek?
+Answer: Index scan reads many or all index pages. Index seek uses an index to directly locate matching rows and is usually more efficient for selective filters.
+
+3. What are distributions in SQL Server/Azure Synapse?
+Answer: In Synapse dedicated SQL pool, data is distributed across compute nodes using hash, round-robin, or replicated distribution. Correct distribution reduces data movement and improves performance.
+
+4. What are window functions?
+Answer: Window functions perform calculations across a related set of rows using OVER(). Examples: ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD, SUM() OVER, and AVG() OVER.
+
+5. What is the difference between Azure Data Factory, Azure Databricks, Azure SQL, Azure Synapse, and Logic Apps?
+Answer: ADF orchestrates and moves data. Databricks processes big data and Spark workloads. Azure SQL is a managed relational database. Synapse is an analytics platform with SQL and Spark. Logic Apps automates workflows and integrations.
+
+6. What is OLTP vs OLAP?
+Answer: OLTP systems handle transactional workloads with frequent inserts/updates and normalized schemas. OLAP systems handle analytical queries over large historical data and often use dimensional models.
+
+7. What is Massively Parallel Processing?
+Answer: MPP splits data and query processing across multiple nodes so large analytical workloads can run in parallel.
+
+8. What is the difference between dedicated SQL pool and serverless SQL pool?
+Answer: Dedicated SQL pool uses provisioned compute and stored distributed data for high-performance analytics. Serverless SQL pool queries files directly in the lake and charges per data processed.
+
+9. What is the difference between views and materialized views?
+Answer: A view is a saved query evaluated at runtime. A materialized view stores results physically and can improve performance but requires refresh/maintenance.
+
+10. Difference between GROUP BY and ORDER BY?
+Answer: GROUP BY aggregates rows into groups. ORDER BY sorts the final result set.
+
+11. Difference between HAVING and WHERE?
+Answer: WHERE filters rows before aggregation. HAVING filters groups after aggregation.
+
+12. Difference between JOIN and UNION?
+Answer: JOIN combines columns from related rows across tables. UNION combines rows from compatible SELECT results.
+
+13. Difference between UNION and UNION ALL?
+Answer: UNION removes duplicates. UNION ALL keeps duplicates and is usually faster.
+
+14. Difference between Merge and Union transformations?
+Answer: Merge combines sorted datasets into one stream. Union All combines multiple inputs without requiring sorting and keeps all rows.
+
+15. What is Conditional Split transformation?
+Answer: It routes rows to different outputs based on conditions, similar to IF/ELSE logic.
+
+16. What is Multicast transformation?
+Answer: It sends the same input rows to multiple outputs.
+
+17. Difference between synchronous and asynchronous transformations?
+Answer: Synchronous transformations process rows without creating a new buffer. Asynchronous transformations create new buffers and can change row counts or block data flow.
+
+18. What are aggregate, sort, and full blocking transformations?
+Answer: They often require all rows before producing output. Sort and Aggregate are blocking because they need the complete dataset or group before output.
+
+19. What are facts and dimensions?
+Answer: Fact tables store measurable business events such as sales amount. Dimension tables store descriptive context such as customer, product, date, or location.
+
+20. Difference between truncate and delete?
+Answer: DELETE removes rows one by one and can use WHERE. TRUNCATE removes all rows by deallocating pages, is faster, usually cannot use WHERE, and resets identity in SQL Server.
+
+21. What is a rapidly changing dimension?
+Answer: A dimension with attributes that change frequently. Common approaches are mini-dimensions, Type 1 overwrite, Type 2 history for selected fields, or separating volatile attributes.
+
+22. What are cursors in SQL?
+Answer: Cursors process rows one at a time. They are useful in limited administrative cases but should usually be replaced with set-based operations for performance.
+
+23. What are triggers in SQL?
+Answer: Triggers are database objects that run automatically after or instead of INSERT, UPDATE, or DELETE events. They can enforce rules or audit changes but should be used carefully.
+
+24. Difference between DROP, DELETE, and TRUNCATE?
+Answer: DROP removes the object. DELETE removes selected rows and logs row changes. TRUNCATE removes all rows quickly and keeps the table structure.
+
+25. How do you clear cache in a Databricks notebook?
+Answer: Use spark.catalog.clearCache(), unpersist cached DataFrames, or restart the cluster if needed.
+
+26. What are ACID transactions?
+Answer: Atomicity, Consistency, Isolation, and Durability. They ensure reliable transactions even during failures.
+
+27. What are limitations of Tumbling Window trigger?
+Answer: It works with fixed, non-overlapping time windows. It needs careful dependency/backfill configuration, can create many runs during catch-up, and is not event-driven.
+
+28. What is normalization?
+Answer: Normalization structures relational data to reduce duplication and improve data integrity, usually through 1NF, 2NF, and 3NF.
+
+29. What is Azure Site Recovery?
+Answer: Azure Site Recovery is a disaster recovery service that replicates workloads to another region or site and helps fail over during outages.
+
+30. What does Secure Transfer Required mean in an Azure Storage account?
+Answer: It forces clients to use secure protocols such as HTTPS when accessing storage.
+
+31. Difference between ROW_NUMBER, RANK, and DENSE_RANK?
+Answer: ROW_NUMBER gives unique sequence. RANK gives same rank for ties and skips ranks. DENSE_RANK gives same rank for ties without gaps.
+
+32. What is a manifest file?
+Answer: A manifest file lists files and metadata used by a process. In data loads, it can tell the system exactly which files to read.
+
+33. What are precedence constraints in SSIS?
+Answer: They control task execution order based on success, failure, completion, or expressions.
+
+34. What are SSIS checkpoints?
+Answer: Checkpoints allow a failed package to restart from the point of failure instead of starting from the beginning.
+
+35. What is SSIS Catalog?
+Answer: SSISDB is the central catalog used to deploy, store, configure, execute, and monitor SSIS projects/packages.
+
+36. What are disadvantages of SSIS?
+Answer: SSIS can be harder to scale for big data/cloud workloads, requires Windows/SQL Server ecosystem knowledge, package deployment can be complex, and cloud-native integration is easier with ADF.
+
+37. Difference between varchar and nvarchar?
+Answer: varchar stores non-Unicode character data. nvarchar stores Unicode data and supports multiple languages but uses more storage.
+
+38. What is the maximum length of varchar and nvarchar in SQL Server?
+Answer: varchar max regular length is 8000 bytes and nvarchar max regular length is 4000 characters. varchar(max) and nvarchar(max) support much larger values.
+
+39. Difference between nvarchar(20) and varchar(20)?
+Answer: nvarchar(20) stores up to 20 Unicode characters. varchar(20) stores up to 20 non-Unicode characters/bytes depending on collation.
+
+40. Difference between varchar and varbinary?
+Answer: varchar stores character text. varbinary stores binary data such as files, images, hashes, or encrypted bytes.
+
+41. Difference between ISNULL, IFNULL, and COALESCE?
+Answer: ISNULL is used in SQL Server, IFNULL in MySQL, and COALESCE is standard SQL. COALESCE can accept multiple expressions and returns the first non-null value.
+
+42. Difference between data warehouse and data mart?
+Answer: A data warehouse is enterprise-wide and integrates data across domains. A data mart is department-specific or subject-specific, often derived from the warehouse.
+
+43. What are types of views?
+Answer: Common types include standard views, indexed/materialized views, partitioned views, and system views.
+
+44. Give a real-time example of star schema and snowflake schema.
+Answer: In a sales star schema, FactSales connects directly to DimCustomer, DimProduct, DimDate, and DimStore. In a snowflake schema, DimProduct may be normalized into Product, Category, and Subcategory tables.
+
+45. Which normalization approach is common in data warehouses?
+Answer: Warehouses often use denormalized star schemas for performance and simplicity, while snowflake schemas normalize some dimensions when needed.
+
+46. How do you read files from ADLS using OAuth?
+Answer: Register an app/service principal, grant storage permissions, configure OAuth credentials in Spark or linked service, and read using abfss:// paths.
+
+47. How do you establish a Databricks connection using mount point?
+Answer: Configure credentials or secret-backed service principal, use dbutils.fs.mount to mount storage, then access files using /mnt/path. In Unity Catalog, external locations are preferred over mounts.
+
+48. What is master-slave architecture in Spark?
+Answer: Spark has a driver program that coordinates work and executors on worker nodes that perform tasks. Modern terms are driver and worker/executor.
+
+49. Difference between narrow and wide transformations in Spark?
+Answer: Narrow transformations do not require shuffle, such as map and filter. Wide transformations require data movement/shuffle, such as groupBy, join, and distinct.
+
+50. Difference between transformations and actions in Spark?
+Answer: Transformations create a new logical plan and are lazy. Actions trigger execution and return results or write output.
+
+51. Difference between partitioning and bucketing?
+Answer: Partitioning stores data in separate folders based on column values. Bucketing distributes data into fixed number of files by hash of a column and can help joins/sampling.
+
+52. How do you connect to a database in Databricks?
+Answer: Use JDBC with spark.read.format("jdbc"), provide URL, table/query, user/password or secrets, and driver. For Azure SQL, use the appropriate JDBC driver and secure credentials.
+
+53. What is ranking function in PySpark?
+Answer: Use Window specification with row_number(), rank(), dense_rank(), percent_rank(), or ntile() from pyspark.sql.functions.
+
+54. How do you add a new column to an existing DataFrame in PySpark?
+Answer: Use withColumn("new_col", expression). Example: df = df.withColumn("load_date", current_date()).
+
+55. What are write modes and formats of DataFrame in PySpark?
+Answer: Write modes include append, overwrite, ignore, and error/errorifexists. Formats include delta, parquet, csv, json, orc, jdbc, and table.
+
+56. What happens if the master/driver node fails in Spark?
+Answer: The running application usually fails because the driver coordinates execution. Jobs should be retried by the scheduler/workflow.
+
+57. What happens if worker/slave nodes fail in Spark?
+Answer: Spark can retry failed tasks on other executors if enough resources are available. If failures exceed retry limits, the job fails.
+
+58. What is DAG in Spark?
+Answer: DAG means Directed Acyclic Graph. Spark builds a logical execution graph of transformations and splits it into stages and tasks for execution.
+
+59. Difference between Azure Synapse and traditional database?
+Answer: Synapse is built for large-scale analytics, distributed processing, lake integration, and MPP workloads. Traditional OLTP databases focus on transactional consistency and frequent row-level operations.
+
+60. What is nth highest salary query?
+Answer: Use DENSE_RANK or ROW_NUMBER. Example: SELECT salary FROM (SELECT salary, DENSE_RANK() OVER(ORDER BY salary DESC) r FROM emp) x WHERE r = n.
+
+61. How do you calculate cumulative sum?
+Answer: Use SUM(amount) OVER(PARTITION BY key ORDER BY date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW).
+
+62. What are lookup cache modes in SSIS?
+Answer: Full cache loads reference data before execution, partial cache loads matches as needed, and no cache queries the reference source for each row.
+
+63. What is SSIS logging?
+Answer: SSIS logging captures events, errors, warnings, row counts, and execution details to files, SQL tables, or SSISDB reports.
+
+64. What are transactions in SSIS?
+Answer: Transactions group package tasks so they commit or roll back together. TransactionOption can be Required, Supported, or NotSupported.
+
+65. What are isolation levels in SSIS/SQL?
+Answer: Isolation levels control how transactions see data. Common levels are Read Uncommitted, Read Committed, Repeatable Read, Snapshot, and Serializable.
+
+66. What is lookup vs merge in SSIS?
+Answer: Lookup matches input rows with reference data. Merge combines two sorted inputs into one output. Merge Join joins two sorted inputs.
+
+67. What are early arriving facts and late arriving dimensions?
+Answer: Early arriving facts arrive before the related dimension record. Use inferred/unknown dimension rows, then update dimensions later when data arrives.
+
+68. What is error handling in SSIS?
+Answer: Configure error outputs, redirect bad rows, use event handlers, logging, checkpoints, transactions, and retry logic.
+
+69. What is deployment utility in SSIS?
+Answer: Legacy package deployment used a deployment utility. Modern project deployment deploys ISPAC files to SSIS Catalog.
+
+70. What is Azure Data Lake Gen2 vs Blob Storage?
+Answer: ADLS Gen2 is built on Blob Storage but adds hierarchical namespace, directory/file ACLs, and big data analytics features.
+
+71. Function vs stored procedure?
+Answer: Functions return a value/table and are used in queries with restrictions. Stored procedures can perform operations, return result sets, use transactions, and are executed with EXEC.
+
+============================================================
+SECTION 4: DATABRICKS BEGINNER QUESTIONS AND ANSWERS
+============================================================
+
+1. What is Databricks?
+Answer: Databricks is a cloud lakehouse platform built around Apache Spark. It supports data engineering, data science, machine learning, SQL analytics, Delta Lake, workflows, and governance.
+
+2. Explain the architecture of Databricks.
+Answer: Databricks has a control plane for workspace, jobs, notebooks, metadata, and orchestration, and a compute/data plane where clusters process data in cloud storage. Users interact through notebooks, SQL, jobs, APIs, and repos.
+
+3. What is a workspace in Databricks?
+Answer: A workspace is the collaborative environment that contains notebooks, repos, dashboards, jobs, clusters, libraries, experiments, and access controls.
+
+4. How do you create a notebook in Databricks?
+Answer: In the workspace, choose Create > Notebook, provide name, language, and cluster, then start writing code or SQL.
+
+5. What languages can you use in Databricks notebooks?
+Answer: Python, SQL, Scala, and R are commonly supported. Shell commands can be run with %sh and markdown with %md.
+
+6. What is Apache Spark?
+Answer: Apache Spark is a distributed processing engine for large-scale data processing, supporting batch, streaming, SQL, machine learning, and graph workloads.
+
+7. Difference between Databricks and Apache Spark?
+Answer: Spark is the open-source engine. Databricks is a managed platform around Spark with optimized runtime, notebooks, jobs, Delta Lake, MLflow, governance, autoscaling, and collaboration features.
+
+8. What are clusters in Databricks?
+Answer: Clusters are groups of compute resources used to run notebooks, jobs, and Spark workloads. They contain a driver and workers/executors.
+
+9. How do you create a cluster in Databricks?
+Answer: Go to Compute, create cluster, select runtime, node type, autoscaling settings, access mode, libraries, and permissions, then start the cluster.
+
+10. What is Delta Lake?
+Answer: Delta Lake is a storage layer that adds ACID transactions, schema enforcement/evolution, scalable metadata, time travel, and efficient upserts to data lakes.
+
+11. How does Delta Lake improve data reliability?
+Answer: Delta Lake uses a transaction log, ACID commits, schema checks, versioning, and isolation to prevent corrupt or partial data writes.
+
+12. What is a DataFrame in Spark?
+Answer: A DataFrame is a distributed table-like collection of rows with named columns and schema. It supports transformations using Spark SQL APIs.
+
+13. What is a Spark job?
+Answer: A Spark job is the execution triggered by an action. Spark divides a job into stages and tasks based on the DAG.
+
+14. How do you schedule jobs in Databricks?
+Answer: Use Databricks Workflows/Jobs to schedule notebooks, JARs, Python scripts, SQL tasks, or dbt tasks with cron/time triggers or continuous runs.
+
+15. What are notebooks used for in Databricks?
+Answer: Notebooks are used for interactive development, ETL, exploration, visualization, documentation, ML experiments, and job tasks.
+
+16. What is Databricks Runtime?
+Answer: Databricks Runtime is the cluster software stack including Apache Spark, optimized libraries, connectors, Delta Lake, Python/R/Scala support, and optional ML/GPU packages.
+
+17. What is the purpose of libraries in Databricks?
+Answer: Libraries add external packages or dependencies such as Python wheels, PyPI packages, Maven libraries, CRAN packages, or JAR files to clusters/jobs.
+
+18. How can you manage permissions in Databricks?
+Answer: Use workspace permissions, cluster policies, job permissions, table grants in Unity Catalog, secret ACLs, repo permissions, and groups/service principals.
+
+19. What is a job cluster?
+Answer: A job cluster is created for a specific job run and terminates after completion. It improves isolation and cost control compared with always-on all-purpose clusters.
+
+20. What is the role of a driver in Spark?
+Answer: The driver runs the main program, creates SparkSession/SparkContext, builds the DAG, schedules tasks, and coordinates executors.
+
+21. What are widgets in Databricks?
+Answer: Widgets are notebook parameters that allow users or jobs to pass values. Common methods are dbutils.widgets.text and dbutils.widgets.get.
+
+22. How do you import data into a Databricks notebook?
+Answer: Read from cloud storage, tables, JDBC, Auto Loader, Kafka, REST/API landing files, or uploaded files using Spark read APIs.
+
+23. What is MLflow?
+Answer: MLflow is an open-source platform for tracking experiments, packaging models, managing model registry, and deploying machine learning models.
+
+24. How do you perform data visualization in Databricks?
+Answer: Use display(), Databricks SQL dashboards, notebook visualization options, matplotlib/plotly, or BI tools connected to Databricks SQL.
+
+25. What is Auto Loader?
+Answer: Auto Loader incrementally and efficiently processes new files arriving in cloud storage using cloudFiles. It supports schema inference/evolution and checkpointing.
+
+26. How can you use SQL in Databricks?
+Answer: Use %sql in notebooks, Databricks SQL editor, SQL warehouses, Spark SQL, views, Delta tables, and dashboards.
+
+27. Difference between temporary view and global temporary view?
+Answer: A temporary view is session-scoped. A global temporary view is available across sessions in the global_temp database until the application ends.
+
+28. How do you read a CSV file in Databricks?
+Answer: Use spark.read.option("header", "true").option("inferSchema", "true").csv(path) or define schema explicitly for production.
+
+29. How do you write data to a Delta table?
+Answer: Use df.write.format("delta").mode("append" or "overwrite").save(path) or saveAsTable/table writes. For SQL use CREATE TABLE USING DELTA or INSERT INTO.
+
+30. What are common data sources for Databricks?
+Answer: ADLS, S3, GCS, Delta tables, Parquet, CSV, JSON, Kafka, Event Hubs, JDBC databases, Snowflake, Synapse, APIs through landing files, and BI/catalog systems.
+
+31. How can you perform ETL in Databricks?
+Answer: Read source data, clean and transform with Spark/SQL, apply quality rules, write to bronze/silver/gold Delta tables, and orchestrate using Workflows or ADF.
+
+32. What is the purpose of Databricks REST API?
+Answer: It automates workspace, jobs, clusters, DBFS/files, permissions, tokens, SQL, and deployment operations.
+
+33. How do you handle missing data in Databricks?
+Answer: Use dropna, fillna, imputation, default values, validation rules, quarantine tables, or business-specific replacement logic.
+
+34. What is a UDF in Spark?
+Answer: A User Defined Function is custom logic applied to columns. Prefer built-in functions for performance; use UDFs only when built-ins cannot solve the problem.
+
+35. Explain lazy evaluation in Spark.
+Answer: Spark transformations are not executed immediately. Spark builds a logical plan and executes it only when an action is called.
+
+36. What is checkpointing in Spark?
+Answer: Checkpointing saves state/progress to reliable storage. In streaming it tracks processed data and state so queries can recover after failure.
+
+37. How do you optimize Spark jobs in Databricks?
+Answer: Use proper file sizes, partitioning, caching, broadcast joins, AQE, optimized writes, Photon where applicable, avoid shuffles, use Delta OPTIMIZE/ZORDER/liquid clustering, and monitor Spark UI.
+
+38. What is Databricks Community Edition?
+Answer: It is a limited free edition of Databricks for learning Spark and notebooks.
+
+39. How do you monitor job performance in Databricks?
+Answer: Use Jobs UI, Spark UI, Ganglia/metrics where available, cluster event logs, driver/executor logs, query profiles, and system tables/monitoring logs.
+
+40. Difference between Data Lake and Data Warehouse?
+Answer: A data lake stores raw/semi-structured/structured data cheaply in files. A warehouse stores curated structured data optimized for SQL analytics. A lakehouse combines both approaches.
+
+============================================================
+SECTION 5: DATABRICKS INTERMEDIATE QUESTIONS AND ANSWERS
+============================================================
+
+1. How do you manage cluster configurations?
+Answer: Use cluster policies, instance pools, job clusters, autoscaling, init scripts, runtime versions, tags, access modes, and Infrastructure-as-Code/Terraform.
+
+2. What is the importance of DBFS?
+Answer: DBFS provides a file-system abstraction in Databricks. It can store files and access mounted cloud storage, though Unity Catalog external locations are preferred for governed data.
+
+3. What are broadcast variables in Spark?
+Answer: Broadcast variables send a read-only copy of small data to each executor so tasks can use it without repeated network transfer.
+
+4. How do you implement data lineage in Databricks?
+Answer: Use Unity Catalog lineage, table/view dependencies, job metadata, Delta history, audit logs, and naming standards across bronze/silver/gold layers.
+
+5. Advantages of Delta Lake over traditional data lakes?
+Answer: Delta provides ACID transactions, schema enforcement/evolution, time travel, scalable metadata, upserts/deletes, streaming and batch unification, and better reliability.
+
+6. How can you version control notebooks?
+Answer: Use Databricks Repos connected to Git, export notebooks, use source files, pull requests, branches, and CI/CD pipelines.
+
+7. Difference between Spark SQL and Hive SQL?
+Answer: Spark SQL runs on Spark and supports DataFrame integration and modern optimizations. Hive SQL traditionally runs on Hive engines like Tez/MapReduce. Syntax overlaps but features/functions may differ.
+
+8. How do you handle streaming data in Databricks?
+Answer: Use Structured Streaming, Auto Loader, Kafka/Event Hubs, checkpoints, watermarks, trigger intervals, foreachBatch, Delta sinks, and monitoring/retry workflows.
+
+9. What is Delta Lake Change Data Feed?
+Answer: CDF records row-level changes between Delta table versions, allowing downstream processes to consume inserts, updates, and deletes incrementally.
+
+10. Types of clusters in Databricks?
+Answer: All-purpose clusters for interactive work, job clusters for scheduled jobs, SQL warehouses for SQL queries, and specialized/serverless compute depending on workspace features.
+
+11. How can you perform A/B testing in Databricks?
+Answer: Randomly assign users/events to control/treatment groups, compute metrics with Spark/SQL, use statistical tests, and track experiments with MLflow if ML is involved.
+
+12. Best practices for optimizing Delta Lake?
+Answer: Use good file sizes, avoid small files, compact with OPTIMIZE, choose partitioning carefully, use data skipping/ZORDER or liquid clustering, vacuum safely, and avoid excessive columns in queries.
+
+13. Explain data partitions in Spark.
+Answer: Partitions are chunks of distributed data processed in parallel by tasks. Proper partitioning improves parallelism and reduces skew/shuffle.
+
+14. How do you integrate Databricks with Azure/AWS?
+Answer: Use cloud storage, IAM/managed identities/service principals, VNet/VPC networking, private endpoints, key vault/secrets, ADF/Airflow orchestration, and cloud-native monitoring.
+
+15. What is data caching in Spark?
+Answer: Caching stores reused DataFrames/tables in memory/disk to speed repeated queries. Use only when reused and unpersist when no longer needed.
+
+16. How do you create a custom visualization?
+Answer: Use notebook visualization APIs, displayHTML, Python libraries like matplotlib/plotly, or build dashboards in Databricks SQL/BI tools.
+
+17. What is Catalyst optimizer?
+Answer: Catalyst is Spark SQL's optimizer. It parses, analyzes, optimizes logical plans, and creates physical plans for efficient execution.
+
+18. How do you troubleshoot job failures?
+Answer: Check job run output, task logs, driver/executor logs, Spark UI, cluster events, error stack trace, input data quality, permissions, libraries, and retry from checkpoint if streaming.
+
+19. What is Adaptive Query Execution?
+Answer: AQE optimizes Spark SQL plans at runtime using actual statistics, such as changing join strategy, coalescing shuffle partitions, and handling skew joins.
+
+20. DataFrames vs Datasets?
+Answer: DataFrames are distributed tables with schema. Datasets add compile-time type safety in Scala/Java. In PySpark, DataFrame is the common API.
+
+21. How do you schedule notebooks to run at specific times?
+Answer: Create a Databricks Job/Workflow with notebook task and configure a schedule/cron expression.
+
+22. How do you manage and monitor cluster costs?
+Answer: Use job clusters, autoscaling, auto-termination, cluster policies, tags, instance pools, right-size nodes, spot/preemptible where safe, SQL warehouse sizing, and cost reports.
+
+23. How can you use Pandas in Databricks?
+Answer: Use pandas for small local data on the driver, pandas API on Spark for distributed pandas-like operations, or convert carefully with toPandas only when data fits memory.
+
+24. What is the Lakehouse architecture?
+Answer: Lakehouse combines data lake storage with warehouse-like reliability, governance, and performance using formats like Delta Lake.
+
+25. How do you implement access control?
+Answer: Use Unity Catalog grants, workspace permissions, cluster policies, secret ACLs, groups, service principals, SQL warehouse permissions, and least privilege.
+
+26. How do you work with large datasets?
+Answer: Use distributed Spark operations, avoid collecting to driver, tune partitions, use column pruning/predicate pushdown, optimize file sizes, and design incremental processing.
+
+27. What is the Spark driver program?
+Answer: The driver contains the application main process, manages SparkSession, schedules tasks, and coordinates executors.
+
+28. How do Python/Scala interact with Delta tables?
+Answer: Use Spark DataFrame reads/writes, SQL commands, DeltaTable APIs for merge/update/delete, and table/history/optimize commands.
+
+29. What strategies are used for data governance?
+Answer: Unity Catalog, catalogs/schemas, ownership, grants, lineage, audit logs, data quality rules, masking/redaction, tagging, and documented data contracts.
+
+30. How can you optimize shuffle operations?
+Answer: Reduce data before shuffle, use broadcast joins, handle skew, tune shuffle partitions, use AQE, avoid wide transformations when possible, and repartition by join/group keys.
+
+31. How do you use MLlib?
+Answer: Prepare features, create pipelines, train algorithms such as regression/classification/clustering, evaluate metrics, and save models. MLflow can track experiments.
+
+32. Batch vs stream processing?
+Answer: Batch processes bounded data at intervals. Streaming processes continuously arriving data with low latency and checkpointed progress.
+
+33. How can you use Databricks for data exploration?
+Answer: Use notebooks, display(), SQL queries, profiling, visualizations, sample datasets, and ad hoc joins/aggregations.
+
+34. What is Databricks SQL Analytics service?
+Answer: Databricks SQL provides SQL warehouses, queries, dashboards, alerts, and BI connectivity for analytics on lakehouse data.
+
+35. How do you configure libraries in a cluster?
+Answer: Install from PyPI, Maven, CRAN, DBFS/workspace files, or init scripts at cluster/job level. For production, pin versions.
+
+36. Use cases for Databricks Jobs?
+Answer: Scheduled ETL, streaming jobs, multi-task workflows, ML training, data quality checks, reporting refreshes, and orchestration across notebooks/scripts.
+
+37. How do you use SQL Analytics with Delta Lake?
+Answer: Register Delta tables in a catalog/schema, query them with Databricks SQL, build dashboards/alerts, and use SQL warehouses.
+
+38. How do you integrate BI tools?
+Answer: Connect tools like Power BI, Tableau, or Looker to Databricks SQL warehouse using JDBC/ODBC/connector and proper permissions.
+
+39. What storage formats are supported?
+Answer: Delta, Parquet, ORC, Avro, JSON, CSV, text, and JDBC sources. Delta/Parquet are preferred for analytics.
+
+40. How do you implement automated testing?
+Answer: Use unit tests for functions, data quality expectations, test notebooks/scripts in CI, sample test data, and validate schemas/counts/business rules before deployment.
+
+============================================================
+SECTION 6: DATABRICKS EXPERIENCED QUESTIONS AND ANSWERS
+============================================================
+
+1. Describe a complex data pipeline built using Databricks.
+Answer: Example: ingest raw files with Auto Loader into bronze Delta tables, validate and clean into silver tables, apply SCD logic into gold marts, run data quality checks, orchestrate with Workflows/ADF, and expose curated data to BI.
+
+2. How do you manage and deploy ML models?
+Answer: Track experiments with MLflow, register models, promote versions between stages/environments, package dependencies, deploy as batch scoring jobs or model serving endpoints, and monitor performance/drift.
+
+3. Advanced Spark performance tuning techniques?
+Answer: Analyze Spark UI, reduce shuffles, tune partitions, broadcast small tables, fix skew, use AQE, cache carefully, optimize file sizes, use Photon, vectorized formats, predicate pushdown, and efficient joins.
+
+4. How do you handle schema evolution in Delta Lake?
+Answer: Use mergeSchema or autoMerge only when controlled, enforce schemas in production, track schema changes, use rescue columns for Auto Loader, and validate compatibility before writes.
+
+5. How do you implement multi-tenant architecture?
+Answer: Separate tenants by catalog/schema/storage path or row-level security, use groups and grants, cluster policies, audit logs, cost tags, and strict data isolation.
+
+6. What is data reconciliation?
+Answer: Reconciliation compares source and target counts, sums, keys, hashes, and business metrics to confirm the load is complete and accurate.
+
+7. Role of Databricks in data mesh?
+Answer: Databricks can host domain-owned data products using Unity Catalog, Delta Sharing, lineage, governance, and standardized pipelines across domains.
+
+8. How do you use Databricks with Kafka?
+Answer: Use Structured Streaming Kafka connector, read topics with bootstrap servers and security settings, parse messages, checkpoint progress, and write to Delta tables.
+
+9. Optimize Delta Lake for high concurrency?
+Answer: Use optimized writes, compaction, proper isolation, separate jobs, avoid conflicting writes to same partitions, use predictive optimization/auto optimize where available, and design workloads to minimize transaction conflicts.
+
+10. Trade-offs between Databricks on AWS vs Azure?
+Answer: Core platform is similar, but identity, networking, storage, security, and integration services differ: IAM/S3/Glue on AWS versus Entra ID/ADLS/ADF/Synapse/Key Vault on Azure.
+
+11. How do you create and manage API endpoints?
+Answer: Use model serving for ML endpoints, SQL Statement Execution API for SQL, Jobs API for workflow endpoints, and secure them with tokens/service principals and permissions.
+
+12. Implications of serverless compute?
+Answer: Serverless reduces infrastructure management and startup time, but requires attention to cost controls, feature availability, networking, data access, and governance settings.
+
+13. How do you implement real-time analytics?
+Answer: Ingest events with Kafka/Event Hubs/Auto Loader, process with Structured Streaming, write to Delta with checkpoints/watermarks, and serve through Databricks SQL or dashboards.
+
+14. How do you use REST API for automation?
+Answer: Use APIs to create jobs, run jobs, manage clusters, permissions, repos, SQL statements, secrets, and deployments from CI/CD scripts.
+
+15. Disaster recovery strategies?
+Answer: Store data in resilient cloud storage, use Delta transaction logs, replicate critical data, export workspace assets/IaC, backup metastore/config, and define RPO/RTO with tested restore procedures.
+
+16. Large-scale migration to Databricks?
+Answer: Inventory sources, design bronze/silver/gold, migrate historical data in batches, validate counts/checksums, implement incremental loads, cut over gradually, and monitor performance/cost.
+
+17. How do you monitor data quality?
+Answer: Use expectations in DLT, constraints, validation queries, row counts, null checks, duplicate checks, anomaly detection, quarantine tables, and alerts.
+
+18. What is Data Vault in Databricks?
+Answer: Data Vault models data using hubs, links, and satellites for historical, auditable integration. Databricks can implement it with Delta tables and scalable Spark transformations.
+
+19. Significance of Delta transaction log?
+Answer: The _delta_log records table versions and actions, enabling ACID transactions, time travel, schema changes, CDF, and reliable reads/writes.
+
+20. How do you implement CI/CD for notebooks?
+Answer: Store notebooks/source files in Git, run tests in CI, package code, deploy jobs/config with Databricks Asset Bundles/Terraform/API, and parameterize environments.
+
+21. Integration with TensorFlow/PyTorch?
+Answer: Use Databricks ML Runtime, install frameworks, prepare data with Spark, train distributed or single-node models, track with MLflow, and deploy through model registry/serving.
+
+22. How do you manage data privacy and compliance?
+Answer: Use Unity Catalog permissions, row/column masking, tokenization, encryption, audit logs, secret management, data retention rules, and privacy-by-design pipelines.
+
+23. How do you implement feature engineering?
+Answer: Create reusable feature transformations, store features in Delta/Feature Store, ensure point-in-time correctness, track lineage, and reuse features for training and inference.
+
+24. Best practices for logging and debugging?
+Answer: Use structured logs, job run IDs, clear exceptions, Spark UI, driver/executor logs, metrics, data quality logs, and avoid excessive display()/collect() in production.
+
+25. How can you enhance security?
+Answer: Use SSO, SCIM groups, least privilege, Unity Catalog, secret scopes, private networking, cluster policies, table ACLs, audit logs, and secure service principals.
+
+26. How do you handle data lake governance?
+Answer: Use catalogs/schemas, ownership, access grants, lineage, data classification, quality checks, lifecycle management, naming standards, and auditing.
+
+27. How do you scale Spark applications?
+Answer: Increase parallelism, choose proper cluster size, use autoscaling, partition correctly, avoid driver bottlenecks, optimize shuffles, and choose efficient file formats.
+
+28. What is cluster auto-scaling?
+Answer: Autoscaling automatically adds or removes worker nodes based on workload demand within configured min/max limits.
+
+29. How do you use Airflow with Databricks?
+Answer: Use Databricks operators/hooks to submit jobs or notebooks, pass parameters, monitor runs, and manage dependencies in DAGs.
+
+30. Impact of S3/ADLS storage options on performance?
+Answer: Performance depends on file size, partitioning, listing overhead, network path, consistency, security, and connector optimizations. Many small files reduce performance.
+
+31. Best practices for maintainable Spark code?
+Answer: Use modular functions, configs, schema definitions, tests, logging, no hardcoded paths/secrets, reusable libraries, and clear bronze/silver/gold separation.
+
+32. How do you integrate cataloging tools?
+Answer: Use Unity Catalog or external catalogs, connect metadata/lineage tools, publish table descriptions/tags, and synchronize governance metadata.
+
+33. Benefits and challenges of Delta Sharing?
+Answer: Benefits: open secure data sharing without copying. Challenges: governance, recipient management, versioning, privacy, and performance expectations.
+
+34. Architect a real-time ingestion pipeline.
+Answer: Source events to Kafka/Event Hubs, streaming read with checkpoint, parse and validate to bronze, deduplicate and enrich to silver, aggregate to gold, monitor lag/errors, and serve dashboards.
+
+35. How do you use Databricks for big data analytics?
+Answer: Store data in Delta Lake, process with Spark/SQL, optimize tables, build marts, use dashboards/BI, and govern with Unity Catalog.
+
+36. Role of SparkContext?
+Answer: SparkContext connects the application to the Spark cluster and coordinates low-level execution. In modern code, SparkSession wraps SparkContext.
+
+37. How do you use Databricks for NLP?
+Answer: Ingest text data, clean/tokenize, use Spark NLP or Python ML libraries/transformers, train or score models, and store results in Delta.
+
+38. Trade-offs of storage formats?
+Answer: CSV/JSON are simple but slow and large. Parquet/ORC are columnar and efficient. Delta adds transactions and reliability on top of Parquet.
+
+39. How do you approach cost management?
+Answer: Use job clusters, auto-termination, autoscaling, policies, right-sized nodes, serverless/spot where appropriate, optimize jobs, monitor DBUs/cloud cost, and tag resources.
+
+40. Describe optimizing a slow Spark job.
+Answer: Example: Spark UI showed shuffle skew in a join. Solution: broadcast small dimension, repartition by key, filter earlier, compact small files, enable AQE, and reduce shuffle partitions. Runtime dropped significantly.
+
+============================================================
+SECTION 7: DATABRICKS ADVANCED NOTES AND SCENARIO QUESTIONS
+============================================================
+
+1. In Hive Metastore vs Unity Catalog, can managed/external tables be recovered?
+Answer: In legacy Hive Metastore, recovery depends on table type and storage. Managed table data may be deleted when dropped, while external data remains in external location. In Unity Catalog, dropped managed tables can often be recovered with UNDROP within the retention window, and external table data remains in external storage.
+
+2. How can you read parameters using dbutils.widgets.text and retrieve values?
+Answer: Create the widget with dbutils.widgets.text("param", "default") and read it using dbutils.widgets.get("param").
+
+3. How do you provide read access to a production notebook for review?
+Answer: Grant the user or group notebook permission such as Can Read, without giving edit/run/manage access unless needed.
+
+4. Which permission allows you to run a notebook attached to a cluster?
+Answer: The user needs permission to run the notebook and attach/restart/use the cluster, commonly Can Attach To/Can Restart depending on cluster access controls.
+
+5. Should production DLT pipelines run on job cluster or all-purpose cluster?
+Answer: Production should use pipeline-managed/job compute, not shared all-purpose clusters, for isolation, repeatability, and cost control.
+
+6. Does CTAS execute every time or only during table creation?
+Answer: CREATE TABLE AS SELECT runs the SELECT during table creation and stores the result. It does not automatically rerun unless the statement is executed again.
+
+7. How do you control read access to production secrets?
+Answer: Use secret scope ACLs and grant READ only to approved users/groups/service principals. Store secrets in Key Vault-backed scopes where possible.
+
+8. Where does %sh run in Databricks?
+Answer: %sh commands run on the driver node of the attached cluster.
+
+9. How does Databricks use file statistics when a query has filters?
+Answer: Delta stores min/max/null stats in the transaction log for data skipping. Databricks can skip files that cannot match the filter.
+
+10. What happens when VACUUM is run on a shallow clone table?
+Answer: Shallow clones reference source data files. Vacuuming requires care because removing source files can break the clone. Do not vacuum source data below needed retention.
+
+11. Which join is not possible between static and streaming DataFrames?
+Answer: Some outer join combinations are restricted. Stream-static joins commonly support inner and certain outer cases, but right/full outer joins with streaming on the wrong side are not generally supported.
+
+12. For CDC source, should you use MERGE INTO or Change Data Feed?
+Answer: Use CDF to read source table changes incrementally when available. Use MERGE INTO to apply inserts/updates/deletes into the target Delta table.
+
+13. How do you find difference between previous and present commit in Delta?
+Answer: Use DESCRIBE HISTORY to identify versions and read versions with time travel, or use Change Data Feed between startingVersion and endingVersion.
+
+14. Best approach for nightly jobs overwriting a table with least latency?
+Answer: If full refresh is required, write to a staging Delta table/path and atomically swap/replace. If logic can be virtualized, use a view over latest data to avoid rewriting.
+
+15. What does OPTIMIZE do and target file size?
+Answer: OPTIMIZE compacts many small Delta files into larger files. The commonly targeted size is around 1 GB per file, though behavior can vary by settings/workload.
+
+16. What does withWatermark do with 10 minutes delay?
+Answer: It defines how late event-time data can arrive for stateful streaming operations. Data older than watermark threshold may be dropped and state can be cleaned.
+
+17. How does aggregating source then overwrite/append target impact load?
+Answer: Overwrite replaces target data and can remove existing history. Append adds new rows and may duplicate aggregates unless keys/windows are managed. Use merge/upsert for incremental aggregates when needed.
+
+18. Why did three email notifications occur for an alert condition?
+Answer: Likely multiple alert evaluations/triggers/runs met the condition, or multiple tasks/retries sent notifications. Check trigger frequency, retries, and alert rules.
+
+19. Why should checkpoint directory be unique for each stream?
+Answer: Each stream stores offsets/state in its checkpoint. Sharing checkpoints corrupts progress/state and causes incorrect processing.
+
+20. How would you set up Auto Loader to bronze with history and update target?
+Answer: Use cloudFiles source with checkpoint and schema location to append raw records to bronze Delta, then use streaming/foreachBatch or scheduled MERGE to update silver/target tables.
+
+21. How do you handle streaming deduplication?
+Answer: Use watermark plus dropDuplicates on business keys/event ID, or maintain stateful deduplication keys within a bounded time window.
+
+22. Batch loading overwrite vs append?
+Answer: Overwrite replaces existing data/table/partition. Append adds new rows. Choose based on full refresh versus incremental load design.
+
+23. If readChangeFeed starts at version 0 and append is used, will there be deduplication?
+Answer: No automatic business deduplication occurs. It appends all change rows read from CDF unless you filter/merge/deduplicate.
+
+24. How identify SCD Type 1 or Type 2 from upsert?
+Answer: Type 1 overwrites existing row values without history. Type 2 expires old records and inserts new records with effective dates/current flag.
+
+25. To avoid performance issues, should trigger time be decreased?
+Answer: Not always. Too frequent triggers can create small files and overhead. Choose trigger interval based on data volume, SLA, and processing time.
+
+26. How does Delta decide file skipping and what about nested columns?
+Answer: Delta uses file-level statistics for indexed/stat columns. Data skipping is strongest for top-level columns with stats; nested column support depends on features/settings.
+
+27. What do Usage and Select permissions allow?
+Answer: USAGE on catalog/schema allows access to the namespace. SELECT on table/view allows reading data, assuming other required permissions are present.
+
+28. How do you create an unmanaged/external table?
+Answer: Specify LOCATION pointing to external storage: CREATE TABLE ... USING DELTA LOCATION 'path'. In Unity Catalog, use external locations and proper grants.
+
+29. Why is date column a good partition candidate?
+Answer: Date is often used in filters and naturally groups data. It helps pruning if cardinality is reasonable. Avoid over-partitioning by high-cardinality dates/timestamps.
+
+30. What happens in transaction log when renaming Delta table?
+Answer: Metadata changes are recorded. The data files usually remain in place; table identity/path behavior depends on managed/external table and catalog.
+
+31. How handle check constraint error?
+Answer: Identify violating records, quarantine or fix them, update source rules, and keep constraints to prevent bad data from entering target tables.
+
+32. Which DESCRIBE commands retrieve table properties, comments, partition details?
+Answer: DESCRIBE DETAIL gives metadata, DESCRIBE HISTORY gives commits, DESCRIBE EXTENDED/FORMATTED gives schema/properties/comment details depending on catalog.
+
+33. How are file statistics used in Delta?
+Answer: Stats such as min/max/null count help skip files during queries, reducing I/O and improving performance.
+
+34. In Ganglia UI, how can you detect spill?
+Answer: Look at executor metrics, memory usage, disk I/O, shuffle spill, and task metrics. Spark UI also shows memory/disk spill per stage/task.
+
+35. If a repo branch is missing locally, how retrieve it?
+Answer: Fetch/pull from remote, switch or checkout the branch in Databricks Repos/Git UI, or recreate local branch tracking the remote branch.
+
+36. After DELETE, can you time travel to see deleted records? How prevent permanent deletion?
+Answer: Yes, until retention/VACUUM removes old files. Increase retention and avoid VACUUM below needed period to preserve time travel.
+
+37. Difference between DBFS and mounts?
+Answer: DBFS is Databricks file system abstraction. Mounts map external cloud storage into DBFS paths. Unity Catalog external locations are preferred for governance.
+
+38. If Jobs API create is executed three times with same JSON, what happens?
+Answer: It creates three separate jobs unless idempotency or update logic is implemented. To reuse, call reset/update existing job ID.
+
+39. How install Python library using %pip?
+Answer: Run %pip install package_name in a notebook. Restart Python if needed. For production, pin versions and install at job/cluster level.
+
+40. Multi-task job: Task1 and Task2 succeed, Task3 fails. Final status?
+Answer: If any required task fails, the job run generally fails. Some tasks may show succeeded, but overall workflow is failed unless dependencies/continue-on-failure are configured.
+
+41. How handle streaming job retries in production?
+Answer: Use job clusters, checkpoints, idempotent sinks, max concurrent runs = 1, retries/unlimited retries as appropriate, alerting, and separate checkpoint per stream.
+
+42. How clone and version a Databricks job using CLI?
+Answer: Get the job JSON with jobs get, modify name/settings/version, then create/reset using Databricks CLI or API, storing JSON in Git.
+
+43. Convert 1TB JSON to Parquet with 512 MB partition size: order of steps?
+Answer: Read JSON with schema, perform narrow transformations/filtering, repartition to target parallelism/size, then write Parquet/Delta. Estimate partitions around data size divided by target file size, adjusted for compression.
+
+44. What happens when duplicates are dropped during batch read and append?
+Answer: Duplicates within that batch are removed before append, but duplicates already in target can still remain unless merge/key-based deduplication is used.
+
+45. If a column was missed during Kafka profiling, how ensure replayability?
+Answer: Store raw events in a bronze table with full payload and metadata. Then reprocess bronze when schema/parsing changes.
+
+46. How do you handle access control for users?
+Answer: Use groups, Unity Catalog grants, cluster policies, workspace object permissions, secret ACLs, and service principals with least privilege.
+
+47. What is pyspark.sql.functions.broadcast?
+Answer: It hints Spark to broadcast a small DataFrame to all executors for a broadcast join, reducing shuffle.
+
+48. What happens with MERGE condition WHEN NOT MATCHED THEN INSERT *?
+Answer: Rows from source that do not match target keys are inserted into the target.
+
+49. How write a silver load function from bronze?
+Answer: Read bronze, validate schema, clean/cast columns, deduplicate, apply business rules, quarantine invalid rows, then merge/append into silver Delta table with audit columns.
+
+50. CASE WHEN is_member('group') THEN email ELSE 'redacted': output if user is not member?
+Answer: The email value is returned as 'redacted'.
+
+51. How use Ganglia UI to troubleshoot a job?
+Answer: Check CPU, memory, network, disk, executor load, and cluster utilization trends. Combine with Spark UI and logs for task-level diagnosis.
+
+52. How list/get tasks using Jobs API?
+Answer: Use jobs/list to list jobs and jobs/get for job settings including tasks. For runs, use runs/list or runs/get to inspect task runs.
+
+53. What is unit testing in Databricks?
+Answer: Testing small functions/transformations with known input and expected output using pytest/unittest, sample DataFrames, and CI jobs.
+
+54. Impact of multiple display() commands?
+Answer: display() can trigger Spark actions and consume resources. In production, avoid unnecessary display/collect and use logging/metrics instead.
+
+55. Will readChangeFeed work if CDF is not enabled?
+Answer: No. CDF must be enabled on the Delta table before changes can be read as change feed.
+
+56. How identify tumbling vs sliding window from code?
+Answer: Tumbling window has fixed non-overlapping windows. Sliding window includes both window duration and slide duration, producing overlapping windows.
+
+57. Performance tuning for spark.sql.files.maxPartitionBytes and spark.sql.shuffle.partitions?
+Answer: maxPartitionBytes controls input split size. shuffle.partitions controls number of shuffle output partitions. Tune based on data size, cores, and task duration; AQE can help adjust dynamically.
+
+============================================================
+SECTION 8: DATA FACTORY, DATABRICKS, AND SYNAPSE PRACTICAL TASKS
+============================================================
+
+A. Data Factory practical tasks
+
+1. SQL Server to Snowflake
+Answer: Use ADF Copy activity with SQL Server source and Snowflake sink, configure Self-hosted IR if SQL Server is on-premises, map columns, stage if needed, and log row counts.
+
+2. Hevo data for Snowflake migration
+Answer: Use Hevo as managed ingestion to move source data to Snowflake, validate schema and counts, and use ADF/Databricks for downstream orchestration or transformation if required.
+
+3. Web service data into table
+Answer: Call API using REST connector or Web activity, land JSON response, flatten/transform using Data Flow/Databricks, and load to SQL/Delta table.
+
+4. Send notification to Teams
+Answer: Use Web activity to call a Teams incoming webhook or call a Logic App that posts to Teams.
+
+5. Self-hosted runtime
+Answer: Install self-hosted IR on a network-accessible machine to connect ADF with on-prem/private data sources.
+
+6. SFTP/FTP file load into database
+Answer: Create SFTP/FTP source linked service and database sink, use Copy activity, parameterize path/file, and archive files after success.
+
+7. Download ZIP, unzip, and load into table
+Answer: Copy ZIP to staging, unzip using Azure Function/Databricks/Custom activity, then load extracted files with Copy/Data Flow.
+
+8. AWS storage to Azure storage movement
+Answer: Configure Amazon S3 and Azure Storage linked services and use Copy activity with parallel copy and retry settings.
+
+9. Log pipeline execution to SQL table
+Answer: Insert run details into a log table using Stored Procedure/Script activity with pipeline run ID, status, start/end time, row counts, and errors.
+
+10. Table artifacts
+Answer: Maintain metadata/config tables for source, target, schema, load type, watermark, key columns, and active flag.
+
+11. Lift and shift SSIS package
+Answer: Deploy SSIS packages to Azure-SSIS IR/SSIS Catalog and execute them through ADF.
+
+12. Azure Data Lake Analytics with U-SQL ETL
+Answer: Legacy U-SQL jobs can transform data in ADLS, but modern designs often use ADF Mapping Data Flow, Databricks, or Synapse Spark.
+
+13. CI/CD release pipeline
+Answer: Use Git integration, publish ARM templates, parameterize environment values, and deploy with Azure DevOps/GitHub Actions.
+
+14. Activities and transformations to cover
+Answer: Be comfortable with Copy, Lookup, Get Metadata, ForEach, If, Switch, Web, Execute Pipeline, Databricks, Stored Procedure, Data Flow transformations, triggers, parameters, and monitoring.
+
+B. Databricks practical tasks
+
+1. Basics of Python and PySpark
+Answer: Know DataFrame operations, select/filter/groupBy/join, withColumn, UDFs, window functions, reading/writing files, and Spark execution basics.
+
+2. Create a cluster
+Answer: Select runtime, node type, worker count/autoscaling, access mode, policies, libraries, and permissions.
+
+3. Create a Key Vault-backed secret scope in Databricks
+Answer: Create Azure Key Vault, grant Databricks access, create secret scope linked to Key Vault, then read secrets with dbutils.secrets.get.
+
+4. Create notebook
+Answer: Create from workspace or repo, choose language, attach cluster, and develop code.
+
+5. Call parent-child notebook
+Answer: Use dbutils.notebook.run("/path/child", timeout, {"param":"value"}) and return values using dbutils.notebook.exit.
+
+6. Algorithm for financial case study
+Answer: Explain data ingestion, feature preparation, model/logic selection, validation metrics, and deployment/monitoring. Example: risk scoring, fraud detection, or forecasting.
+
+7. Deployment
+Answer: Use Git, CI/CD, Databricks Asset Bundles/Terraform/API, environment parameters, and jobs/workflows.
+
+C. Azure Synapse practical tasks
+
+1. Create SQL pools and Spark clusters
+Answer: In Synapse workspace, create dedicated/serverless SQL pools and Apache Spark pools, configure networking/security, and assign permissions.
+
+2. Syntax migration from SQL Server to Synapse
+Answer: Review unsupported T-SQL features, replace temp/cursor-heavy logic, use CTAS, external tables, distributed tables, and Synapse-compatible data types/functions.
+
+3. Synapse case study
+Answer: Ingest data into ADLS, use Synapse pipelines/Spark/SQL pool to transform, model warehouse tables, optimize distribution/partitioning, and serve Power BI reports.
+
+============================================================
+END OF FILE
+============================================================

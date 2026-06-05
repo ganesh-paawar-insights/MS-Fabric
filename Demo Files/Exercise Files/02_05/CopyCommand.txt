@@ -1,0 +1,11 @@
+COPY INTO DailySalesCopyCommand
+(StoreCode default 'zzzz' 1, Date 2, TotalSales 3, TotalAmount 4)
+FROM 'https://[storageaccount].blob.core.windows.net/[container]/[folder]'
+WITH (
+    FILE_TYPE = 'CSV',
+    CREDENTIAL = (IDENTITY='Shared Access Signature', SECRET='sp=r&st=2021-07-21T01:44:28Z&se=2021-07-22T09:44:28Z&spr=https&sv=2020-08-04&sr=c&sig=tct4Xv7dm3s1TqaVZFCm1r6EdmgOOjgdV%2B4aYmEaMk%3D'),
+    ENCODING = 'UTF8',
+    FIELDTERMINATOR = ',',
+    FIRSTROW=2
+)
+

@@ -1,0 +1,23 @@
+select top 10 *
+from openrowset(
+    bulk 'https://[account].blob.core.windows.net/[container]/dailysales',
+    parser_version = '2.0',
+    format='csv',
+    firstrow = 2
+     ) as row
+
+
+select top 10 row.StoreCode, row.Date,row.TotalSales, row.TotalAmount AS [filename]
+from openrowset(
+    bulk 'https://[account].blob.core.windows.net/[container]/dailysales',
+    parser_version = '2.0',
+    format='csv',
+    firstrow = 2 )
+    with(
+        StoreCode VARCHAR(100) 1,
+        Date DATE 2,
+        TotalSales BIGINT 3,
+        TotalAmount BIGINT 4
+    ) as row
+
+

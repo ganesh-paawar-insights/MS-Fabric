@@ -1,0 +1,5 @@
+00001John Smith         IT        00075000
+00002Mary Johnson       HR        00065000
+00003David Williams     IT        00082000
+00004Lisa Brown         FINANCE   00072000
+00005James Miller       HR        00054000

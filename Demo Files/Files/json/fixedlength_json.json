@@ -1,0 +1,6 @@
+[
+    {"name":"pid","type":"string","length":True}
+    {"name":"pname","type":"string","length":True}
+    {"name":"quantity","type":"string","length":True}
+    {"name":"amount","type":"string","length":True}
+]

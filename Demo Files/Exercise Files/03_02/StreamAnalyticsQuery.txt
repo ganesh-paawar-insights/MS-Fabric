@@ -1,0 +1,6 @@
+SELECT
+    StoreCode, Date, Duration, Operator, SelfCheckout, CashOnHand
+INTO
+   Synapse
+FROM
+    SalesEvents

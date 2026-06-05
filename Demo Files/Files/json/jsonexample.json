@@ -1,0 +1,12 @@
+{
+"id": "01",
+"name": "Tom Hanks",
+"age": 20.0,
+"email": "th@hollywood.com",
+"Cars":
+  {
+  "make": "Bentley",
+  "year": 1973.0,
+  "color": "White"
+  }
+}

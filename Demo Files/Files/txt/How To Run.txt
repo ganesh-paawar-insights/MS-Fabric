@@ -1,0 +1,5 @@
+1. Open Console on the folder
+2. Run npm install
+3. Run npm run generate
+4. Enter amount of records you wish to generate
+5. Files will be found in the output folder

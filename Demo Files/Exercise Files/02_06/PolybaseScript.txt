@@ -1,0 +1,50 @@
+
+CREATE MASTER KEY ENCRYPTION BY PASSWORD='MyVeryStrongPassword$$##';
+
+CREATE DATABASE SCOPED CREDENTIAL SalesDataCredentials
+      WITH IDENTITY = 'user', Secret = '[AccountKey]';
+
+
+CREATE EXTERNAL DATA SOURCE SalesDataSource with (  
+      TYPE = HADOOP,
+      LOCATION ='wasbs://[container]@[account].blob.core.windows.net',  
+      CREDENTIAL = SalesDataCredentials 
+);  
+
+
+CREATE EXTERNAL FILE FORMAT CSVFileFormat 
+WITH
+(
+    FORMAT_TYPE = DelimitedText,
+    FORMAT_OPTIONS 
+    (
+       FIELD_TERMINATOR = ',', STRING_DELIMITER = '"', FIRST_ROW = 2
+    )
+);
+
+	CREATE EXTERNAL TABLE [dbo].[DailySales_External] 
+(
+    StoreCode VARCHAR(100) NOT NULL,
+    Date DATETIME NOT NULL,
+    TotalSales BIGINT NOT NULL,
+    TotalAmount BIGINT NOT NULL
+)
+WITH 
+(
+    LOCATION='dailysales',
+    DATA_SOURCE = SalesDataSource ,
+    FILE_FORMAT = CSVFileFormat ,
+    REJECT_TYPE = value,
+    REJECT_VALUE = 0
+);
+
+select top 10 * from [dbo].[DailySales_External] 
+
+Create Table [dbo].[DailySalesPolybase]
+with(
+    DISTRIBUTION= HASH(StoreCode)
+)
+AS
+select * from [dbo].[DailySales_External] 
+
+select * from [dbo].[DailySalesPolybase]

@@ -1,0 +1,745 @@
+Best-effort transcription of attached handwritten PDF: pyspark.pdf
+
+Note: The source PDF contains handwritten notes. A few words were unclear, so they are marked as [unclear] where needed.
+
+================================================================================
+PAGE 1
+================================================================================
+
+1) from pyspark.sql.functions import *
+
+2) %ls -> list all files in current directory
+
+1. External table & Managed table
+
+External table:
+- Only metadata.
+- Data will not be deleted if we delete the table.
+- Storage location is outside Databricks, e.g. ADLS, S3 bucket, etc.
+
+Managed table:
+- Data and metadata both.
+- Data and metadata get deleted if we delete the table.
+- Table is saved in Databricks storage.
+
+How to type/check table:
+- %sql describe [table name]
+- describe history [table name]
+
+2. Temporary views and Global views
+
+Temporary views:
+- Temporary views are local to the session.
+- How to check views: show tables.
+
+Global views:
+- Global views are accessible across all sessions within the same Spark session.
+- show tables for temporary.
+- show tables in global_temp for global.
+
+3. Tenant id -> subscription -> resource group -> resources.
+
+4. dbutils.fs.mount() -> to show mount points.
+   Databricks utility file system.
+   ls -> list all files.
+   dbutils.help() -> show all the functions.
+
+5. Ways to mount Databricks and ADLS:
+- SAS token with secret scope and key vault.
+- App registration.
+- Managed identity and Unity Catalog.
+
+================================================================================
+PAGE 2
+================================================================================
+
+Definitions:
+- Resilient: can recover if something fails.
+- Distributed: data is split across many nodes.
+- Dataset: collection of data (rows, records).
+
+6. RDD - Resilient Distributed Dataset
+
+An RDD is a collection of data that is distributed across multiple machines and can be processed in parallel.
+
+Imagine:
+- Too large for one computer.
+- One big Excel file is split into multiple parts.
+- Each part is processed by different nodes at the same time.
+- That split data = RDD.
+
+7. Spark Architecture
+
+Diagram content:
+- Spark application
+- Spark driver
+- Spark session
+- Cluster manager
+- Spark executors
+
+Notes:
+- When you create a Spark job/application, it creates a Spark application, Spark object, and Spark session.
+- Spark driver communicates with the cluster manager for resources.
+- Cluster manager assigns the resources and the Spark driver can communicate with executors.
+- Spark session is the Spark entry point:
+  df = spark.read.csv()
+- Monitoring is done by the driver.
+
+Cluster managers:
+1. Standalone - comes with Spark.
+2. YARN - Yet Another Resource Negotiator.
+3. Mesos.
+4. Kubernetes.
+
+================================================================================
+PAGE 3
+================================================================================
+
+Notes:
+- 1 file -> 1 table -> 1 partition.
+- Example: 16 GB file, 4 GB each node, total 4 slots, 4 GB/node.
+- df.explain() -> to see physical plan.
+
+Job:
+A Spark job is a unit of work that Spark executes when you call an action.
+
+In short:
+- When you run an action, Spark creates a job.
+- Job -> triggered by action.
+- Stage -> group of operations.
+- Task -> smallest unit that runs on one partition.
+
+Flow:
+Code -> Driver -> DAG -> Job -> Stage -> Task -> Result.
+
+DAG:
+- Directed Acyclic Graph.
+- A plan is Spark's execution plan that shows how data moves from input to output through transformations.
+
+Spark operations are divided into two types:
+1. Transformation
+   - Where you want to transform the data.
+   - Examples: select, filter, orderBy, groupBy.
+
+2. Action
+   - Where you want to get the result.
+   - Examples: write, show, count, collect, commit.
+
+Note:
+- If a Spark operation returns a result, it is an action.
+- Otherwise it is a transformation.
+
+Transformation types:
+1. Narrow transformation
+   - Data stays in the same partition.
+   - Faster.
+   - No shuffle.
+   - Examples: filter, select.
+   - If transformation is applied row-by-row on one partition, it is a narrow transformation.
+
+2. Wide transformation
+   - Data moves across partitions.
+   - Shuffle happens.
+   - Slower.
+   - Examples: orderBy, groupBy.
+   - In wide transformation, you cannot process alone; data is collected across partitions.
+
+================================================================================
+PAGE 4
+================================================================================
+
+Governance:
+- Control + Rules + Responsibility.
+
+Environment:
+- Dev, UAT, Prod.
+- 2 nodes, 4 nodes, 8 nodes.
+
+Unity Catalog:
+Unity Catalog is like a central discovery catalog for all the data in an organization. It keeps track of datasets, tables, and files. It is used to organize, secure, and let teams easily access data while ensuring data governance and compliance.
+
+Metadata:
+- Stores information about the data.
+- Examples: schema, number of columns, rows, who created this table.
+
+Diagram:
+- Unity Catalog with data manager and storage.
+- Databricks workspace and compute connected to catalog/storage.
+
+Shuffling:
+- Shuffling happens when a transformation needs data from multiple partitions to be arranged in one place.
+- After shuffling, partitions may increase due to joins or similar operations.
+- Spark default shuffle partition count is 200.
+
+================================================================================
+PAGE 5
+================================================================================
+
+Vacuum:
+- Used to delete old or obsolete files from a Delta table to free up storage.
+- Removes files no longer needed after updates/deletes.
+- Helps in reducing storage cost and improving query performance.
+
+Vacuum Delta table retention:
+- 168 hours = 7 days older data/files.
+
+Optimize:
+- Optimize is used to combine small files into bigger files for faster queries in Delta tables.
+- Helps in reducing the number of small files/file fragmentation.
+- Improves read/query performance.
+
+Command:
+OPTIMIZE delta_table ZORDER BY (customer_id);
+
+Z-Ordering:
+- Sorts data to make queries faster on important columns.
+
+Accumulator:
+- An accumulator is a variable used to collect values across executors in Spark, e.g. counters/sums.
+- Only the driver can read the final value.
+- Executors update it during tasks.
+- Example: use a counter to get the number of tasks finished.
+
+Z-Ordering:
+- Z-ordering is a data layout technique in Delta Lake that stores related column values closer together to speed up query performance.
+
+Types of processing modes:
+Batch processing:
+- Data is collected and processed in bulk at scheduled intervals.
+- Example: daily bank transaction reports.
+
+================================================================================
+PAGE 6
+================================================================================
+
+PySpark:
+- Py3 -> Java.
+- Library.
+
+Batch processing handles large volumes of data at fixed time intervals.
+
+Processing modes table:
+
+Mode          Data Quantity    Latency       Example
+Batch         Bulk             Hours         Daily reports
+Micro-batch   Small interval   Seconds       Streaming analytics
+Stream        Continuous       Seconds       Monitoring
+Real-time     Continuous       Milliseconds  Fraud prevention
+
+Notes:
+- Banks use batch processing for daily reconciliation.
+- Micro-batch for analytics.
+- Real-time processing for fraud detection.
+
+Deployment:
+1. Client mode
+   - Driver runs on your local machine.
+   - If system closes, the entire system will stop because driver is on the local machine.
+2. Cluster mode
+   - Driver runs on the cluster node.
+
+Spark memory management:
+- Example: 4-core, 4 GB.
+- 1 executor.
+- If 1 GB = 1000 MB, assume 1000 - 300 = 700 MB.
+- Spark memory and user memory separation:
+  - Spark memory: execution memory and storage memory.
+  - User memory.
+  - Reserved memory.
+- Spark memory can be divided, for example:
+  - 50% storage memory.
+  - 50% execution memory.
+  - 25% user memory.
+  - Reserved memory.
+- For user-defined functions, user memory is used.
+
+================================================================================
+PAGE 7
+================================================================================
+
+Lazy evaluation:
+Spark uses lazy evaluation, which means Spark does not execute anything until an action comes. The moment an action comes, a job is created. For every job, Spark has one DAG, which describes how code actually executes.
+
+Cluster types:
+1. Single node
+   - A single node cluster has only one machine that acts as both driver and executor.
+   - Used for development, testing, and learning.
+
+2. Multi-node
+   - A multi-node cluster has one driver and multiple worker nodes to process data in parallel.
+   - Used for production workloads.
+
+Databricks cost:
+- Cost calculated as DBUs consumed x DBU price.
+
+Azure Analytics:
+- Combination of ADF + Spark + OCI/other services in one workspace.
+
+Dedicated pool vs serverless pool:
+Dedicated pool:
+- You pre-provision resources in advance and use them for regular/heavy workloads.
+- Always running unless paused.
+- Faster.
+
+Serverless pool:
+- You do not reserve resources.
+- You query data directly from ADLS and pay only when you run queries.
+
+Types of triggers:
+Triggers in ADF are used to automatically start pipelines based on a schedule, event, or time window.
+
+1. Schedule trigger
+   - Used when we have a fixed time, e.g. every 15 minutes, once a day, once a month.
+
+2. Tumbling window trigger
+   - Used when we have dependencies.
+   - Can set concurrency and retry policy.
+
+3. Storage event trigger
+   - Runs a pipeline when a file arrives or changes in storage.
+
+4. Custom event trigger
+   - Pipeline runs once a message is received in the event; the event triggers the pipeline.
+
+Key Vault:
+- Wherever secret information is stored, put it in Key Vault for security and privacy.
+- Examples: keys, passwords, certificates.
+
+================================================================================
+PAGE 8
+================================================================================
+
+Integration Runtime:
+- IR is the powerhouse for ADF.
+- Provides power for transformation and data movement/data integration capabilities across different network environments.
+- By default we receive: AutoResolveIntegrationRuntime.
+
+IR Types:
+1. Azure
+2. Self-hosted - on-prem to cloud.
+3. Azure SSIS - for SSIS migration.
+4. Azure Airflow - Airflow.
+
+Notes:
+- Used for SQL Server integration services / SSIS migration.
+- Diagram shows ADF moving data from on-prem/SQL to ADLS in cloud.
+
+Difference between Parameters and Variables:
+
+Parameters:
+- Cannot change during debug.
+- Multiple levels:
+  - pipeline level
+  - dataset level
+  - linked service level
+
+Variables:
+- Can change the value.
+- Only pipeline level.
+- Have separate activity.
+
+Tumbling window trigger:
+- A schedule trigger runs a pipeline at a fixed time, e.g. every day at 2 AM.
+- A tumbling window trigger runs a pipeline for a fixed time window and ensures each window runs only once even if there are failures.
+- We can set retry count and concurrency.
+
+================================================================================
+PAGE 9
+================================================================================
+
+Data Skewness:
+Data skewness means data is unevenly distributed across partitions, causing some tasks to process much more data than others.
+
+Example:
+- Country column with majority of data from India and fewer rows from other countries.
+- Heavily partitioned data can take more time on wide transformations and slow jobs.
+
+How to fix skew/repartition:
+- df2 = df.repartitioning(5)
+- Or df.repartitioning(10, "country")
+- Evenly distributed data helps reduce time to process partitions.
+
+Repartitioning vs Coalesce
+
+Repartitioning:
+- Redistributes data evenly across partitions using shuffling.
+- Can increase or decrease partitions.
+- Causes shuffle.
+- Expensive due to shuffle.
+- Slow.
+
+Coalesce:
+- Reduces partitions without shuffle by combining partitions.
+- No shuffle happens.
+- Faster.
+
+Cache vs Persist
+
+cache():
+- Stores the dataframe/RDD in memory (RAM) for reuse.
+- Faster.
+- May fail if data does not fit in memory.
+- df.cache()
+
+persist():
+- Provides an option to choose how data is stored:
+  - memory only
+  - memory and disk
+  - disk only, etc.
+- Safer than cache because it can use disk if memory is insufficient.
+- df.persist()
+
+================================================================================
+PAGE 10
+================================================================================
+
+Serialization:
+- Serialization is the process of converting data into a byte format to reduce memory usage and enable efficient data transfer.
+- Compressed form.
+
+Deserialization:
+- Means converting serialized data (byte format) back into usable objects.
+
+Join:
+- A join combines rows from two tables or DataFrames based on a common column/key.
+
+Syntax:
+df.join(df2, "condition", join_type)
+
+Join types:
+- Inner: returns only matching rows from both tables.
+- Left: all rows from left and matching rows from right.
+- Right: all rows from right and matching rows from left.
+- Full outer: all rows from both tables, matched or unmatched.
+- Left semi join: returns only matching rows of left table.
+- Left anti join: returns left table rows unmatched from right table.
+- Cross join: most expensive.
+
+Broadcast join:
+- Broadcast join is a join optimization where Spark sends a small table to all executors.
+- The join happens locally without shuffling a large table.
+- Why used: to avoid shuffle because shuffle is expensive and time taking.
+- When used: when one table is small enough to fit in memory.
+- Customizable threshold.
+
+================================================================================
+PAGE 11
+================================================================================
+
+Broadcast join import:
+from pyspark.sql.functions import broadcast
+
+Syntax:
+df.join(broadcast(df2), df.id == df2.id)
+
+Limitation:
+- Whenever broadcast join happens, out-of-memory problems can occur because if table is large in size, it cannot hold the whole dataframe.
+
+Optimization:
+- Partition based on id.
+- Sort-merge join.
+- Sort-merge join is a technique where Spark first sorts tables on the join key and then merges them to produce results.
+
+Example:
+df1 = df1.repartition(partitions, "id")
+df2 = df2.sortWithinPartitions("id")
+
+join_df = df1.join(df2, df1.id == df2.id)
+display(join_df)
+
+Bucketing:
+- Bucketing is a technique of dividing a table or dataset into a fixed number of files/buckets based on a column's hash value to improve query performance.
+
+Example:
+df.write \
+  .bucketBy(10, "customerid") \
+  .sortBy("transaction_date") \
+  .saveAsTable("bucketed_transactions")
+
+Note:
+- If you want to join, the number of buckets in both DataFrames must be the same.
+- Plan/output shows partitions.
+
+AQE - Adaptive Query Execution:
+- Adaptive query execution in Spark dynamically optimizes query plans at run time by handling skew, coalescing partitions, and switching join strategies to improve performance.
+
+================================================================================
+PAGE 12
+================================================================================
+
+Sizing and configuration notes:
+- To process 100 GB of data, keep 3x to 5x data size capacity available.
+- For 100 GB, maybe 300-500 GB processing/caching capacity.
+- Why? Shuffle, extra data, caching, serialization, fault tolerance.
+- Sizing: how to decide system configuration size.
+- Hourly: 5-15 TB per day.
+- Per month: 150-450 TB per month.
+
+Example:
+Data = 100 GB.
+Default partition size = 128 MB.
+
+Number of partitions:
+100 x 1024 / 128 = 800 partitions.
+
+Notes:
+- One core handles one partition/task at a time.
+- Let us take 4-8 cores per executor size.
+- Number of cores = 800 / 8 = 100 cores.
+- Or around 100 tasks / 100 partitions processed in parallel.
+
+Memory:
+- Divide memory.
+- Example: 4-6 GB.
+- If 4 GB each and 100 cores, total memory required = 400 GB.
+- 8 cores, 4 GB RAM.
+
+Worker calculation:
+- Cores/executor/worker: 100 / 8 = 12.5 ~= 13 workers.
+- RAM: 13 x 32 = 416 GB, meets requirements.
+
+Summary example:
+- Data size: 100 GB.
+- Partition size: 128 MB.
+- Number of partitions: 800.
+- Number of cores: 100.
+- RAM per core: 4 GB.
+- Workers: 13.
+- Cores per worker: 8.
+- RAM per worker: 32 GB.
+
+Additional note:
+- Need output/intermediate data capacity, e.g. 200-300 GB of data.
+- 2-4 nodes first may be needed.
+- Autoscaling/incremental data 30-60 min [unclear].
+
+================================================================================
+PAGE 13
+================================================================================
+
+Types of activity in ADF:
+1. Copy activity
+   - Used to move data from source to destination.
+
+2. Data Flow
+   - Used for complex transformations like joins, transformations, aggregations, deduplication, schema changes.
+
+3. Stored Procedure
+   - Execute business logic inside a database.
+
+4. If Condition
+   - Run activity based on condition.
+
+5. For Each
+   - Used for iteration.
+
+6. Switch
+   - Execute different logic for different values, like case statement.
+
+7. Execute Pipeline
+   - Call one pipeline from another pipeline.
+
+8. Wait Activity
+   - Pause pipeline for a fixed interval.
+
+9. Until Activity
+   - Repeat execution until a condition is met.
+   - Used for polling scenarios like checking file arrival.
+
+10. Web Activity
+   - Call REST APIs.
+   - Used to interact with external systems.
+
+11. Get Metadata
+   - Fetch file information like file exists, size, and last modified.
+
+12. Lookup Activity
+   - Read small reference data or configuration values.
+
+13. Fail Activity
+   - Explicitly fail a pipeline with custom message/condition.
+   - Stop the pipeline and mark it as failed when condition is not met.
+
+High Watermark Concept for incremental load:
+- Lookup -> read date from high watermark file.
+- Lookup -> read max last modified date.
+- Copy -> fetch records between two dates / from source.
+- Copy -> update high watermark file by last modified date.
+
+ADF components:
+- Pipeline
+- Activity
+- Dataset
+- Linked service
+- Triggers
+- Integration runtime
+
+If Condition vs Switch:
+- If Condition handles binary logic.
+- Switch handles multiple cases.
+
+Retry Policy:
+- Automatically retries failed activity executions based on configured count and interval.
+
+================================================================================
+PAGE 14
+================================================================================
+
+How do you improve copy activity performance?
+- By enabling parallelism, partitioning, and using appropriate IR.
+
+Lookup vs Get Metadata:
+- Lookup: scans/reads data.
+- Get Metadata: fetches file properties.
+
+How do you parameterize pipeline?
+- Using pipeline parameters, dataset parameters, and dynamic expressions.
+
+ADF:
+- ADF is an ETL/ELT tool used for data movement, transformation, and system integration across different data sources.
+
+How do you handle schema evolution?
+- Handle schema changes using schema drift for new data and strict schema enforcement for curated layers.
+- Medallion architecture organizes data into Bronze, Silver, and Gold layers.
+- It follows business rules for data quality and governance.
+
+Bronze layer:
+- Stores raw data exactly as it comes from the source.
+
+Silver layer:
+- Contains cleaned and transformed data.
+- Remove duplicates.
+- Fix data types.
+- Apply business rules.
+
+Gold layer:
+- Stores final data used for reporting and analytics.
+- Aggregated data.
+- Business-ready tables.
+- Used by BI teams / data science teams.
+
+================================================================================
+PAGE 15
+================================================================================
+
+How Spark processes data:
+- Spark processes data by splitting it into smaller parts and processing them in parallel.
+- When we write Spark code, the driver first understands the logic and prepares a plan.
+- Execution starts only when an action is called.
+- Spark distributes the data across executors.
+- Each executor processes its partition.
+- The final result is written or returned.
+
+Spark planning process:
+User code -> Unresolved logical plan -> Analyzer -> Resolved logical plan -> Optimized logical plan.
+
+Diagram notes:
+- Syntax/analysis.
+- Catalog.
+- Metadata (data about data).
+- Query check.
+- Final optimized plan.
+
+Physical plan:
+- Optimized logical plan -> physical plan candidates.
+- Cost model chooses best physical plan.
+- Executed on cluster.
+- Example: physical filtering process.
+
+================================================================================
+PAGE 16
+================================================================================
+
+Project example:
+In my project, we built an end-to-end data engineering pipeline on Azure using a metadata-driven framework based on medallion architecture.
+
+We ingested data from multiple legacy and cloud sources into ADLS using Azure Data Factory, Databricks Auto Loader, and Databricks.
+
+All raw data landed in the Bronze layer as Delta tables.
+
+In the Silver layer, we applied data quality checks, deduplication, CDC, and SCD Type-2 logic using Spark and Delta merge.
+
+Finally, in the Gold layer, we created business-ready aggregated tables, which were consumed by BI teams and data science teams for further use cases. The entire solution was incremental, reusable, secure using Unity Catalog, and optimized using Delta Lake features like AQE, time travel, and optimize.
+
+================================================================================
+PAGE 17
+================================================================================
+
+Question:
+Files arrive in ADLS every 2 hours. How do you process only new files?
+
+Answer:
+Use Databricks Auto Loader with checkpointing. It processes only new files automatically.
+
+Question:
+How do you ingest data from APIs to Databricks?
+
+Answer:
+Using Databricks notebooks, call APIs, convert data into DataFrame, and write into Bronze.
+
+Question:
+How do you handle late-arriving files?
+
+Answer:
+Auto Loader handles late-arriving data automatically using file metadata.
+
+ACID:
+A - Atomicity:
+- Transaction is all or nothing.
+
+C - Consistency:
+- Data always moves from one valid state to another.
+
+I - Isolation:
+- Multiple jobs do not interfere with each other.
+
+D - Durability:
+- Once data is committed, it is never lost.
+
+Question:
+If job fails midway, how do you recover it?
+
+Answer:
+Checkpointing and Delta logs know the safe checkpoint/state.
+
+Lineage:
+- It is the sequence of transformations applied on data.
+- It is used to recover the data if a failure occurs instead of repeating everything.
+
+================================================================================
+PAGE 18
+================================================================================
+
+Vacuum:
+- Delta table retention: 168 hours.
+- 24 x 7 = 7 days.
+
+Time travel examples:
+select * from delta_table VERSION AS OF 3;
+
+select * from delta_table TIMESTAMP AS OF '2025-01-20 10:30:00';
+
+ADF/Spark config example:
+spark.conf.set("spark.sql.adaptive.enabled", "true")
+
+Optimize:
+OPTIMIZE delta_table ZORDER BY (customer_id);
+
+Z-Ordering:
+- Z-ordering is a data layout technique in Delta Lake that stores related column values close together to speed up query performance.
+
+Lazy evaluation:
+- Spark is lazy evaluation, which means Spark does not execute anything until an action comes.
+- The moment an action comes, a job is created.
+- For every job, there is a DAG.
+
+Tumbling window trigger:
+- A tumbling window trigger runs a pipeline for a fixed time window and ensures each window runs only once if there are failures.
+- We can set concurrency and retry count.
+
+Examples:
+df.repartitioning(5)
+df.repartitioning(10, "country")
+
+AQE:
+- Adaptive Query Execution in Spark dynamically optimizes query plans at run time by handling skewness, coalescing partitions, and switching join strategies to improve performance.

@@ -1,0 +1,5 @@
+customer_id,customer_name,city,state,customer_segment,updated_at
+1001,Aarav Traders,Pune,Maharashtra,SMB,2026-07-10 09:00:00
+1002,Meera Retail,Mumbai,Maharashtra,Enterprise,2026-07-10 09:00:00
+1003,Kiran Stores,Satara,Maharashtra,SMB,2026-07-10 09:00:00
+1004,Nova Mart,Bengaluru,Karnataka,Enterprise,2026-07-10 09:00:00

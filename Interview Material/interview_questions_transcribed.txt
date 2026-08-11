@@ -1,0 +1,336 @@
+Interview Questions Transcribed from the Uploaded Images
+======================================================
+
+Note:
+- Repeated/overlapping screenshots were consolidated to avoid duplicate entries.
+- A few lines were partially cut off in the screenshots; those are marked as truncated where needed.
+- Obvious spelling/capitalization was lightly cleaned for readability while preserving the original meaning.
+
+
+INTRO / INTERVIEW INTRODUCTION FRAMEWORK
+========================================
+
+Your introduction should clearly answer these 4 questions within 90–120 seconds:
+1. Who am I professionally?
+2. What am I strongest at?
+3. Where have I applied these skills?
+4. Why am I relevant for this role?
+
+Example — Sr. Data Engineer (4 to 7 Years)
+------------------------------------------
+I am a Senior Data Engineer with about 7 years of experience, including more than 4 years working extensively on Azure and Databricks platforms. My core strength lies in building scalable, high-performance data pipelines using PySpark, Databricks, Delta Lake, and ADF.
+
+In my recent project for a financial services client, I designed and implemented end-to-end ingestion and transformation pipelines handling multiple terabytes of data daily. I led Spark performance optimization by addressing data skew, implementing optimal partitioning, and tuning cluster configurations, which reduced... [text continues off-screen]
+
+Example — Lead/Architect (8+ Yrs)
+--------------------------------
+I am a Data Architect with over 10 years of experience designing and leading large-scale data engineering solutions on Azure, Databricks, and modern lakehouse platforms. My expertise includes defining enterprise data architectures, Databricks lakehouse design using Delta Lake, orchestration with ADF, and governance using Unity Catalog and security best practices.
+
+In a recent enterprise modernization initiative, I led the migration from legacy data warehouse systems to Databricks-based lakehouse architecture. I defined ingestion, transformation, and consumption patterns, guided teams on Spark optimization standards, and ensured scalability, cost... [text continues off-screen]
+
+Standard Interview Introduction Framework
+-----------------------------------------
+Professional Snapshot (15–20 sec)
+- Name & total experience (Mention experience by data stack, not only total years)
+- Current role and specialization (Align your role title to the interview)
+
+Example:
+I'm a Databricks and Azure Data Engineer with 7 years of experience, including 4+ years working on Databricks, PySpark, and Azure data platforms.
+
+Core Skill Stack (30–40 sec)
+- Mention only skills relevant to the role.
+
+Data Engineering:
+- Databricks
+- ADF
+- Delta Lake
+- Performance tuning
+- Medallion Architecture
+- Notebook optimization
+
+Azure / Fabric:
+- ADF
+- ADLS Gen2
+- Synapse
+- Fabric Lakehouse
+- OneLake
+- DirectLake
+
+Programming:
+- Python
+- PySpark
+- Spark SQL
+- SQL
+
+Project Experience (40–50 sec) — Context → Action → Impact
+- Mention maximum 2 projects
+- Quantify results where possible
+
+Example:
+In a retail analytics project, I built ADF-orchestrated Databricks pipelines processing ~3 TB/day. By optimizing Spark jobs and implementing incremental loads, we reduced pipeline runtime by 35% and improved reporting SLAs.
+
+Role Alignment Closing (10–15 sec)
+- Explicitly connect your experience to the project role for which you are giving the interview.
+
+Example:
+Given my hands-on experience with Databricks, Azure orchestration, and scalable data pipelines, I believe I'm a strong fit for this role.
+
+
+AZURE DATABRICKS / ADB
+======================
+
+Delta Lake / Databricks Fundamentals
+------------------------------------
+1. What is Delta Lake and why use it?
+2. Delta table vs Parquet.
+3. Delta table versioning & time travel.
+4. VACUUM and retention period.
+5. Liquid clustering.
+6. OPTIMIZE and Z-ORDER — when to use.
+7. Managed vs External Delta tables.
+8. Unity Catalog — benefits and use cases.
+9. Medallion Architecture (Bronze, Silver, Gold).
+10. Handling small file problem.
+11. Job cluster vs Interactive cluster (cost & use cases).
+12. Cluster sizing (D, E, F series).
+13. How Spark reads large Delta tables.
+
+Databricks Workflows & Debugging
+--------------------------------
+14. Databricks Workflows & Debugging.
+15. Running notebooks sequentially and in parallel.
+16. Running hundreds of notebooks with dependency.
+17. Job orchestration using Databricks Workflows.
+18. Debugging long-running Databricks jobs.
+19. Spark UI usage for performance analysis.
+20. Handling notebook failures.
+
+ADF Topics within ADB Sheet
+---------------------------
+21. Azure Data Factory (ADF).
+22. ADF architecture and components.
+23. Types of Integration Runtime (IR).
+24. Activities in ADF (Copy, Lookup, Metadata, ForEach, If).
+25. Parameterization in ADF and ... [truncated in screenshot]
+26. Dynamic pipelines / metadata-driven framework.
+27. Incremental load strategies (with & without watermark).
+28. CDC handling in ADF.
+29. SCD Type 2 implementation using ADF.
+30. Copy data between storage accounts.
+31. API ingestion using ADF.
+32. SharePoint ingestion using ADF.
+33. Triggers in ADF.
+34. Sending failure email alerts.
+35. Performance optimization for long-running pipelines.
+36. CI/CD for ADF and Databricks.
+
+Scenario-Based ADB Questions
+----------------------------
+37. Pipelines running hours for small data — how to debug.
+38. Identifying slow notebook cells.
+39. Ingest subset of tables from large source systems.
+40. Handling new requirements in existing pipelines.
+41. Migration projects — end-to-end approach.
+42. Fault-tolerant batch and streaming pipelines.
+43. How can you achieve time travel of a Delta table for more than 1 month?
+44. A Spark job is slow — what steps will you take to diagnose and optimize it?
+45. How to deploy a workflow from dev to upper environment (QA or Prod)?
+46. How to ingest huge files arriving every hour to ADLS in the most optimized way?
+47. When AQE is enabled by default, why did you use broadcast join explicitly?
+48. What should be the ideal frequency of running OPTIMIZE and VACUUM?
+49. When to use PySpark and when should we use Spark SQL, and why?
+
+
+AZURE DATA FACTORY (ADF)
+========================
+
+General / Architecture Scenarios
+--------------------------------
+1. Move data from multiple sources (API, SQL, Oracle) into a warehouse daily — how would you design it?
+2. There is one Oracle server having two databases with 10 tables each. We need to bring data from all 20 tables into ADLS. How many linked services and datasets would be needed in the most optimal way?
+3. Difference between tumbling trigger and scheduled trigger; explain their use cases.
+
+Data Flow in ADF
+----------------
+4. Explain the difference between Mapping Data Flow and Wrangling Data Flow. When would you use each?
+5. What are the performance considerations when working with Mapping Data Flows?
+
+Data Movement & Copy Activity
+-----------------------------
+6. You have a single source and need to load data into multiple target tables. How would you design this end-to-end using ADF?
+7. What are the ways to optimize performance in Copy Activity?
+8. ADF supports different copy methods (such as staged copy, direct copy, PolyBase, etc.). Can you explain each and when to use them?
+9. How does PolyBase work in the context of Copy Activity? What are its prerequisites and limitations?
+
+Parallelism & Execution Strategy
+--------------------------------
+10. What is the difference between sequential and parallel execution in ADF pipelines?
+11. How do you implement parallel loading of data in ADF and what are the best practices?
+
+Data Distribution and Performance
+---------------------------------
+12. What are the different table distribution methods (Hash, Round Robin, Replicated) in Azure Synapse? How do you decide which one to use?
+13. Why is Round Robin often recommended for tables larger than 10 GB?
+
+File-based Processing and Activities
+------------------------------------
+14. How would you read data from a TXT file in ADF?
+15. What does the Lookup Activity do in ADF? Can you provide a practical use case?
+
+Debugging & Error Handling
+--------------------------
+16. A pipeline failed midway. How would you troubleshoot the issue? What steps do you take to identify and resolve the error?
+
+Integration Runtime (IR)
+------------------------
+17. What is Integration Runtime in ADF? What are its different types and use cases (AutoResolve, Self-hosted, Azure IR)?
+18. How do you choose the right IR for your pipeline?
+
+ADF with Notebooks and Synapse
+------------------------------
+19. If you're required to execute a Notebook from ADF, how do you integrate it? What are the configuration steps?
+
+Azure Storage Options
+---------------------
+20. What is the difference between Azure Data Lake Storage Gen2 and Blob Storage?
+21. In which scenarios would you use ADLS Gen2 vs Blob Storage?
+
+Triggering Pipelines
+--------------------
+22. What are the different types of triggers available in ADF (Schedule, Tumbling Window, Event-based, Manual)?
+23. When would you use a Tumbling Window Trigger vs a Schedule Trigger?
+
+ADF Interview Question
+----------------------
+24. Describe the most challenging project you have worked on using Azure Data Factory (ADF).
+25. Highlight the problem statement, architecture/design approach, how you overcame the challenge, and the final outcome.
+
+
+PYSPARK
+=======
+
+Spark Fundamentals
+------------------
+1. Spark architecture (Driver, Executor, Job, Stage, Task).
+2. RDD vs DataFrame vs Dataset.
+3. Lazy vs eager execution.
+4. Wide vs Narrow transformations.
+5. repartition() vs coalesce().
+6. cache() vs persist().
+7. Broadcast join — when and why.
+8. Predicate pushdown & column pruning.
+9. AQE (Adaptive Query Execution).
+10. DAG — what it is and why it matters.
+11. Spark memory architecture.
+
+PySpark Transformations & Coding
+--------------------------------
+12. PySpark Transformations & Coding.
+13. Joins and aggregations in PySpark.
+14. Window functions in PySpark.
+15. Drop duplicates and identify duplicates.
+16. Replace values conditionally.
+17. SCD Type 1 & SCD Type 2 implementation in PySpark.
+18. Merge incremental data using DeltaTable.
+19. Handling data skewness.
+20. Handling missing/null values.
+21. Read multiline JSON.
+22. Read CSV, JSON, Parquet files.
+23. Convert CSV to JSON.
+24. Read Excel files from ADLS.
+25. Read data via API in PySpark.
+26. Union DataFrames with different schemas.
+27. Explode and flatten nested data.
+28. Schema enforcement vs infer schema.
+29. Schema drift handling in Delta tables.
+
+Python Logic in PySpark Context
+-------------------------------
+30. Find missing numbers in a sequence.
+31. List-based transformations.
+32. Loop-based logic questions.
+33. String manipulation (email parsing, remove special characters).
+34. Find index of elements in a list.
+35. Read a CSV, add "_new" suffix to each column without using WithRenamedColumn.
+36. Read a CSV, print out integer-type columns and populate nulls with 9999.
+37. Create a function for implementing SCD1.
+38. Create a function for implementing SCD2.
+
+Coding Task
+-----------
+Write the code for the below steps:
+- Read a CSV.
+- Add a new column ETL_DATE and set its value to the current timestamp.
+- Change the date format to "mm-DD-YYYY hr:mm:ss".
+- Save as a Delta table, partitioned by ETL_DATE.
+
+
+SQL
+===
+
+SQL Fundamentals
+----------------
+1. Types of SQL joins and differences (Inner, Left, Right, Full).
+2. Difference between UNION vs UNION ALL.
+3. WHERE vs HAVING clause.
+4. IS NULL vs = NULL.
+5. Primary Key vs Unique Key.
+6. Clustered vs Non-clustered index.
+7. Types of SQL indexes and use cases.
+8. Functions vs Stored Procedures vs Triggers.
+9. CTE — why and when to use.
+10. Table variables vs temp tables.
+11. ACID properties and how to ensure them.
+
+Query-Based / Scenario SQL
+--------------------------
+12. Find highest / second / third highest salary.
+13. Department-wise highest and average salary.
+14. Employees who are also managers.
+15. Identify and delete duplicate records.
+16. Customers who have not placed any orders.
+17. Customers who placed orders in every month.
+18. Top N customers by total spending (without LIMIT).
+19. Rolling sum / cumulative sum (3 months, quarterly).
+20. Quarterly revenue calculation.
+21. Find nth row in a table.
+22. Ranking functions: ROW_NUMBER, RANK, DENSE_RANK.
+23. Cross JOIN and CROSS APPLY use cases.
+24. Employees without reportees.
+25. Count reportees in hierarchy (tree structure).
+26. Delete duplicates using window functions.
+27. Merge data into SCD Type 2 table using SQL.
+28. Design Star Schema and SCD2 table.
+29. Write the logic to find non-matching records from two tables.
+30. Write logic to find the incremental records count from incremental data.
+31. How to remove duplicates while keeping one row from duplicate records in SQL.
+32. How to compare two large datasets and find the non-matching records.
+33. Write a query to detect overlapping subscription periods using start_date and end_date.
+34. How can CTEs (Common Table Expressions) help in writing modular queries?
+
+
+MICROSOFT FABRIC
+================
+
+1. What is OneLake?
+2. Design data ingestion (Bronze → Silver → Gold) in Fabric for 100 tables in an on-premises SQL Server and some files in Azure Data Lake. Some tables are full load, some are incremental. How would you handle schema drift and rerun only failed tables without re-running the entire pipeline?
+3. How do you resolve Delta Lake merge conflicts in Fabric?
+4. How do you implement SCD in Fabric with example?
+5. What are the advantages of Delta over Parquet?
+6. How do you implement time travel in Fabric?
+7. What is workspace role in Fabric?
+8. How to optimize performance in Lakehouse?
+9. How do you manage cell operations in a Fabric notebook?
+10. How do you parameterize notebooks?
+11. Use case for shortcut vs mirroring.
+12. How would you design an ETL pipeline in Fabric?
+13. How do you debug pipeline failures?
+14. How would you design multi-tenant architecture in Fabric?
+15. Your Fabric pipeline is slow when processing large data (~1 TB). How will you optimize it?
+16. How do you implement row-level security (RLS) in Fabric?
+17. How do you optimize joins in PySpark?
+18. How do you perform upsert (MERGE)?
+19. Share an example where you took the initiative to automate a repetitive data engineering task.
+20. You have a dataset of 1 billion sales transactions stored in Azure Data Lake. You need to calculate the top 5 products by revenue per region efficiently using PySpark.
+21. Given a Sales table with CustomerID, PurchaseDate, and Amount, write a query to find customers who made more than 3 purchases in the last 6 months.
+22. From a Performance table with EmployeeID, Department, and Score, write a query to find the top 3 performers in each department.
